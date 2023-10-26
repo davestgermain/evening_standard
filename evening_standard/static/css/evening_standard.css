@@ -1,0 +1,29 @@
+body {
+    font-family: sans-serif;
+    padding-left: .5em;
+}
+nav {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: .5em;
+    margin-bottom: 1.5em;
+}
+nav ul {
+    margin: 0;
+    display: flex;
+    list-style: none;
+    font-size: 1.5em;
+}
+nav ul li {
+    padding-right:.9em;
+}
+.flex {
+    display: flex;
+}
+
+.flex div {
+    width: 50%;
+}
+
+.venue {
+    line-height: 1em;
+}

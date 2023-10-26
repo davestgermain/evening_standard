@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if page.get_upcoming %}
+<h1>Upcoming Shows</h1>
+<ul>
+    {% for show in page.get_upcoming %}
+    <li>{{show.start}} at <a href="{{show.url}}">{{show.venue}}</a></li>
+    {% endfor %}
+</ul>
+<hr>
+{% endif %}
+
+{% if page.get_past %}
+<h1>Past Shows</h1>
+<ul>
+    {% for show in page.get_past %}
+    <li><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

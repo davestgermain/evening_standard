@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<link rel = "stylesheet" href = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+{% endblock %}
+
+{% block body_class %}show-page{% endblock %}
+
+{% block content %}
+<div class="flex">
+    <div class="venue">
+        <h1><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h1>
+        <h2>{{page.venue.city}}, {{page.venue.state}}</h2>
+        <h2>{{page.start}}</h2>
+        {% if not page.is_past %}
+        <h3><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
+
+        <div id="my-map" style="width:400px; height:400px;"></div>
+        {% endif %}
+
+        {{ page.body|richtext }}
+    </div>
+
+    <div>
+    {% if page.set_list and not user.is_anonymous %}
+    <h3>Set List</h3>
+    <ol>
+        {% for song in page.set_list.songs.all %}
+        <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
+        {% endfor %}
+    </ol>
+    <hr>
+    {% endif %}
+    <div>
+        {% if page.recordings %}
+        <ol>
+            {% for recording in page.get_recording_docs %}
+            <li><a href="{{recording.url}}">{{recording.title}}</a></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+ // Creating map options
+ var mapOptions = {
+ center: [42.3601, -71.88202],
+ zoom: 16
+ }
+ var map = new L.map('my-map', mapOptions);
+ 
+ var layer = new  L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+ 
+ map.addLayer(layer);
+ </script>
+
+{% endblock %}

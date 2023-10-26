@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+    {{ page.body|richtext }}
+
+    <ul>
+    {% for show in page.get_shows_with_recordings %}
+    <li><a href="{{show.url}}">{{show}}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+

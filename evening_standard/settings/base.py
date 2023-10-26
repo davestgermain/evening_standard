@@ -47,24 +47,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    'mptt',
-    'haystack',
-    'widget_tweaks',
-
+    "mptt",
+    "haystack",
+    "widget_tweaks",
     # Machina apps:
-    'machina',
-    'machina.apps.forum',
-    'machina.apps.forum_conversation',
-    'machina.apps.forum_conversation.forum_attachments',
-    'machina.apps.forum_conversation.forum_polls',
-    'machina.apps.forum_feeds',
-    'machina.apps.forum_moderation',
-    'machina.apps.forum_search',
-    'machina.apps.forum_tracking',
-    'machina.apps.forum_member',
-    'machina.apps.forum_permission',
-
+    "machina",
+    "machina.apps.forum",
+    "machina.apps.forum_conversation",
+    "machina.apps.forum_conversation.forum_attachments",
+    "machina.apps.forum_conversation.forum_polls",
+    "machina.apps.forum_feeds",
+    "machina.apps.forum_moderation",
+    "machina.apps.forum_search",
+    "machina.apps.forum_tracking",
+    "machina.apps.forum_member",
+    "machina.apps.forum_permission",
 ]
 
 MIDDLEWARE = [
@@ -178,22 +175,22 @@ MEDIA_URL = "/media/"
 
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     },
-    'machina_attachments': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp',
+    "machina_attachments": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/tmp",
     },
 }
 
 HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    "default": {
+        "ENGINE": "haystack.backends.whoosh_backend.WhooshEngine",
+        "PATH": os.path.join(BASE_DIR, "whoosh_index"),
     },
 }
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Wagtail settings
 

@@ -22,6 +22,20 @@ class SetList(models.Model):
     notes = models.TextField(blank=True)
     songs = models.ManyToManyField(Song, through="SetSong")
 
+    def get_absolute_url(self):
+        return f"/setlist/{self.id}/"
+
+    def duplicate(self):
+        dest = SetList(notes=self.notes, title=f"{self.title} (copy)")
+        dest.save()
+        for obj in SetSong.objects.filter(setlist=self):
+            SetSong.objects.create(
+                setlist=dest,
+                song=obj.song,
+                sort_order=obj.sort_order,
+            )
+        return dest
+
     def __str__(self):
         return self.title
 
@@ -31,11 +45,11 @@ class SetSong(models.Model):
     setlist = models.ForeignKey(SetList, on_delete=models.CASCADE)
     sort_order = models.IntegerField()
 
-
     class Meta:
-        ordering = ['sort_order',]
+        ordering = [
+            "sort_order",
+        ]
         unique_together = ("setlist", "sort_order")
 
-
     def __str__(self):
-        return f'{self.sort_order} – {self.song}'
+        return f"{self.sort_order} – {self.song}"

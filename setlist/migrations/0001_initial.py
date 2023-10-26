@@ -5,47 +5,84 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('wagtailimages', '0025_alter_image_file_alter_rendition_file'),
+        ("wagtailimages", "0025_alter_image_file_alter_rendition_file"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SetList',
+            name="SetList",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('notes', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("notes", models.TextField(blank=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Song',
+            name="Song",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('key', models.CharField(blank=True, max_length=4, null=True)),
-                ('notes', models.TextField(blank=True)),
-                ('charts', models.ManyToManyField(blank=True, to='wagtailimages.image')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("key", models.CharField(blank=True, max_length=4, null=True)),
+                ("notes", models.TextField(blank=True)),
+                (
+                    "charts",
+                    models.ManyToManyField(blank=True, to="wagtailimages.image"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SetSong',
+            name="SetSong",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sort_order', models.IntegerField()),
-                ('setlist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='setlist.setlist')),
-                ('song', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='setlist.song')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("sort_order", models.IntegerField()),
+                (
+                    "setlist",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="setlist.setlist",
+                    ),
+                ),
+                (
+                    "song",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="setlist.song"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['sort_order'],
+                "ordering": ["sort_order"],
             },
         ),
         migrations.AddField(
-            model_name='setlist',
-            name='songs',
-            field=models.ManyToManyField(through='setlist.SetSong', to='setlist.song'),
+            model_name="setlist",
+            name="songs",
+            field=models.ManyToManyField(through="setlist.SetSong", to="setlist.song"),
         ),
     ]

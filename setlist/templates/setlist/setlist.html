@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+    {% if do_print %}
+    {% for song in list.songs.all %}
+        {% for chart in song.charts.all %}
+            <img width="100%" src="{{chart.file.url}}" />
+        {% endfor %}
+    <script type="text/javascript">
+        window.addEventListener("load", function() {
+            window.setTimeout(window.print, 1000)
+        });
+    </script>
+    {% endfor %}
+    {% else %}
+    <h1>{{list.title}}</h1>
+    <p>{{list.notes}}</p>
+    <ol>
+        {% for song in list.songs.all %}
+        <li><a href="/django-admin/setlist/song/{{song.id}}/change/">edit</a> {{song}}</li>
+        {% endfor %}
+    </ol>
+    <a href="/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/">Edit</a>
+    <a href="/setlist/{{list.id}}/duplicate/">Duplicate</a>
+    <a href="/setlist/{{list.id}}/?print=1">Print</a>
+    {% endif %}
+{% endblock %}
+

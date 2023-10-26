@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('shows', '0004_show_set_list'),
+        ("shows", "0004_show_set_list"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='venue',
-            name='website',
+            model_name="venue",
+            name="website",
             field=models.URLField(blank=True, null=True),
         ),
     ]

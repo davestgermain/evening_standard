@@ -33,14 +33,14 @@
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
-        <a href="/"><img src="{% static 'img/logo.jpg' %}" alt="The Evening Standard" /></a>
+        <a id="logolink" href="/"><img src="{% static 'img/logo.jpg' %}" alt="The Evening Standard" /></a>
         <nav>
             <ul>
                 <!-- <li><a href="/about/">About</a></li> -->
                 <li><a href="/shows/">Shows</a></li>
                 <li><a href="/recordings/">Recordings</a></li>
                 {% if not user.is_anonymous %}
-                <li><a href="/setlists/">Set Lists</a></li>
+                <li><a href="/setlist/">Set Lists</a></li>
                 <li><a href="/forum/">Discussion</a></li>
                 {% endif %}
             </ul>

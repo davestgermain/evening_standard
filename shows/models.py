@@ -23,10 +23,9 @@ class Venue(models.Model):
 
     @property
     def map_url(self):
-        loc = f'{self.address}, {self.city},{self.state} {self.zipcode}'
-        loc = loc.replace(' ', '+')
+        loc = f"{self.address}, {self.city},{self.state} {self.zipcode}"
+        loc = loc.replace(" ", "+")
         return f"https://maps.google.com/maps/dir//{loc}/"
-
 
     @property
     def best_url(self):
@@ -39,15 +38,16 @@ class Venue(models.Model):
 class ShowIndex(Page):
     body = RichTextField(blank=True)
     content_panels = Page.content_panels + [
-        FieldPanel('body'),
+        FieldPanel("body"),
     ]
 
     def get_upcoming(self):
-        return Show.objects.filter(start__gte=timezone.now(), public=True).order_by('start')
+        return Show.objects.filter(start__gte=timezone.now(), public=True).order_by(
+            "start"
+        )
 
     def get_past(self):
-        return Show.objects.filter(start__lt=timezone.now()).order_by('-start')
-
+        return Show.objects.filter(start__lt=timezone.now()).order_by("-start")
 
 
 class Show(Page):
@@ -56,29 +56,31 @@ class Show(Page):
     venue = models.ForeignKey(Venue, on_delete=models.SET_NULL, null=True)
     body = RichTextField(blank=True)
 
-    recordings = models.ForeignKey(Collection, blank=True, null=True, on_delete=models.SET_NULL)
-    set_list = models.ForeignKey(SetList, blank=True, null=True, on_delete=models.SET_NULL)
+    recordings = models.ForeignKey(
+        Collection, blank=True, null=True, on_delete=models.SET_NULL
+    )
+    set_list = models.ForeignKey(
+        SetList, blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     search_fields = Page.search_fields + [
-        index.SearchField('venue'),
-        index.SearchField('start'),
-        index.SearchField('body'),
+        index.SearchField("venue"),
+        index.SearchField("start"),
+        index.SearchField("body"),
     ]
 
     content_panels = Page.content_panels + [
-        FieldPanel('start'),
-        FieldPanel('venue'),
-        FieldPanel('body'),
-        FieldPanel('public'),
-        FieldPanel('set_list'),
-        FieldPanel('recordings'),
+        FieldPanel("start"),
+        FieldPanel("venue"),
+        FieldPanel("body"),
+        FieldPanel("public"),
+        FieldPanel("set_list"),
+        FieldPanel("recordings"),
     ]
 
     def get_recording_docs(self):
-        return Document.objects.filter(collection=self.recordings).order_by('title')
+        return Document.objects.filter(collection=self.recordings).order_by("file")
 
     @property
     def is_past(self):
         return self.start < timezone.now()
-
-

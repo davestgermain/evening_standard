@@ -2,7 +2,6 @@ from django.contrib import admin
 from . import models
 
 
-
 class SetSongInline(admin.TabularInline):
     model = models.SetSong
     extra = 1

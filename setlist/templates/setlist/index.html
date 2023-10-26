@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+    <h1>Set Lists</h1>
+    <ul>
+        {% for list in lists %}
+        <li><a href="/setlist/{{list.id}}/">{{list}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

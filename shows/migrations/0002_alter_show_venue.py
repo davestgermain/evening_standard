@@ -5,15 +5,18 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('shows', '0001_initial'),
+        ("shows", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='show',
-            name='venue',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shows.venue'),
+            model_name="show",
+            name="venue",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="shows.venue",
+            ),
         ),
     ]

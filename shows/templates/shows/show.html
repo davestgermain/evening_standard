@@ -27,7 +27,7 @@
 
     <div>
     {% if page.set_list and not user.is_anonymous %}
-    <h3>Set List</h3>
+    <h3><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
     <ol>
         {% for song in page.set_list.songs.all %}
         <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>

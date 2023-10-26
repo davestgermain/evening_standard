@@ -5,16 +5,20 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('setlist', '0002_alter_setsong_unique_together'),
-        ('shows', '0003_showindex_show_recordings'),
+        ("setlist", "0002_alter_setsong_unique_together"),
+        ("shows", "0003_showindex_show_recordings"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='show',
-            name='set_list',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='setlist.setlist'),
+            model_name="show",
+            name="set_list",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="setlist.setlist",
+            ),
         ),
     ]

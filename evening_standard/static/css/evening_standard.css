@@ -52,3 +52,15 @@ li.upcoming {
 .show-index h1 {
     text-align: center;
 }
+
+@media print {
+    nav {
+        display: none;
+    }
+    #logolink {
+        display: none;
+    }
+    #wagtail-userbar-template {
+        display: none;
+    }
+}

@@ -21,9 +21,10 @@ nav ul li {
 }
 .flex {
     display: flex;
+    justify-content: space-evenly;
 }
 
-.flex div {
+.flex div.col {
     width: 50%;
 }
 
@@ -61,6 +62,12 @@ li.upcoming {
         display: none;
     }
     #wagtail-userbar-template {
+        display: none;
+    }
+    wagtail-userbar {
+        display: none;
+    }
+    .np {
         display: none;
     }
 }

@@ -2,6 +2,86 @@
 {% load static %}
 {% load wagtailcore_tags %}
 
+{% block extra_css %}
+<style>
+.slist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.slist li {
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid #dfdfdf;
+  background: #f5f5f5;
+  cursor: pointer;
+  width: 600px;
+  font-size: 1.5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* (B) DRAG-AND-DROP HINT */
+.slist li.hint {
+  border: 1px solid #ffc49a;
+  background: #feffb4;
+}
+.slist li.active {
+  border: 1px solid #ffa5a5;
+  background: #ffe7e7;
+}
+.controls {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px dotted #ccc;
+}
+#song-picker {
+    font-size: 1.6em;
+    width: 400px;
+/*    border: none;*/
+    text-align: center;
+    margin-right: 20px;
+}
+#song-picker option {
+    border:none;
+}
+p {
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 10px;
+}
+button {
+    width: 80px;
+    padding: 5px;
+    background: #7196DC;
+    color: #000;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+button.alert {
+    background: #BD0D09;
+    color: #DAC76D;
+}
+button:hover {
+    background: #ACBDDC;
+    color: #000;
+}
+@media print {
+    h1 {
+        text-align: center;
+    }
+    .slist li {
+        border: none;
+        font-size: 1em;
+        padding: 5px;
+        list-style-type: decimal;
+        display: list-item;
+        list-style-type: decimal;
+    }
+}
+</style>
+{% endblock %}
+
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
@@ -10,23 +90,148 @@
         {% for chart in song.charts.all %}
             <img width="100%" src="{{chart.file.url}}" />
         {% endfor %}
-    <script type="text/javascript">
-        window.addEventListener("load", function() {
-            window.setTimeout(window.print, 1000)
-        });
-    </script>
     {% endfor %}
     {% else %}
     <h1>{{list.title}}</h1>
+    {% if list.notes %}
     <p>{{list.notes}}</p>
-    <ol>
+    {% endif %}
+    <ol class="slist" id="setlist">
         {% for song in list.songs.all %}
-        <li><a href="/django-admin/setlist/song/{{song.id}}/change/">edit</a> {{song}}</li>
+        <li id="{{song.id}}">{{song}}
+            <div>
+            <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="np">Edit</button>
+            <button onclick="removeSong('{{song.id}}')" class="alert np">Delete</button>
+            </div>
+        </li>
         {% endfor %}
     </ol>
-    <a href="/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/">Edit</a>
-    <a href="/setlist/{{list.id}}/duplicate/">Duplicate</a>
-    <a href="/setlist/{{list.id}}/?print=1">Print</a>
+    {% if all_songs %}
+    <select id="song-picker" class="np">
+        {% for song in all_songs %}
+        <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
+        {% endfor %}
+    </select>
+    <button id="add-song" class="np">Add</button>
     {% endif %}
+    <!-- <input type="text" name="add"> -->
+    <div class="controls np flex">
+        <button onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
+        <button onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
+        <button id="set-order-button" class="alert" style="display:none">Save</button>
+        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="alert">Duplicate</button>
+    </div>
+    {% endif %}
+    {% csrf_token %}
 {% endblock %}
 
+{% block extra_js %}
+<script type="text/javascript">
+
+function slist (target) {
+  // (A) SET CSS + GET ALL LIST ITEMS
+  target.classList.add("slist");
+  let items = target.getElementsByTagName("li"), current = null;
+
+  // (B) MAKE ITEMS DRAGGABLE + SORTABLE
+  for (let i of items) {
+    // (B1) ATTACH DRAGGABLE
+    i.draggable = true;
+    
+    // (B2) DRAG START - YELLOW HIGHLIGHT DROPZONES
+    i.ondragstart = e => {
+      current = i;
+      for (let it of items) {
+        if (it != current) { it.classList.add("hint"); }
+      }
+    };
+    
+    // (B3) DRAG ENTER - RED HIGHLIGHT DROPZONE
+    i.ondragenter = e => {
+      if (i != current) { i.classList.add("active"); }
+    };
+
+    // (B4) DRAG LEAVE - REMOVE RED HIGHLIGHT
+    i.ondragleave = () => i.classList.remove("active");
+
+    // (B5) DRAG END - REMOVE ALL HIGHLIGHTS
+    i.ondragend = () => { for (let it of items) {
+        it.classList.remove("hint");
+        it.classList.remove("active");
+    }};
+ 
+    // (B6) DRAG OVER - PREVENT THE DEFAULT "DROP", SO WE CAN DO OUR OWN
+    i.ondragover = e => e.preventDefault();
+ 
+    // (B7) ON DROP - DO SOMETHING
+    i.ondrop = e => {
+      e.preventDefault();
+      if (i != current) {
+        let currentpos = 0, droppedpos = 0;
+        for (let it=0; it<items.length; it++) {
+          if (current == items[it]) { currentpos = it; }
+          if (i == items[it]) { droppedpos = it; }
+        }
+        if (currentpos < droppedpos) {
+          i.parentNode.insertBefore(current, i.nextSibling);
+        } else {
+          i.parentNode.insertBefore(current, i);
+        }
+      }
+      document.getElementById('set-order-button').style.display = '';
+    };
+  }
+}
+function save_list() {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let list_nodes = document.getElementById('setlist').children;
+    var new_order = {};
+    for (let i=0; i<list_nodes.length; i++) {
+        new_order[parseInt(list_nodes[i].id)] = i+1;
+    }
+    // return;
+    fetch("/setlist/{{list.id}}/edit/", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "{{list.title}}",
+        order: new_order
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        "X-CSRFToken": csrftoken
+      }
+    })
+      .then((response) => response.json())
+      .then((json) => location = location);
+}
+
+function removeSong(elt_id) {
+    document.getElementById('setlist').removeChild(document.getElementById(elt_id));
+    save_list();
+}
+
+window.addEventListener("load", function() {
+    {% if do_print %}
+        window.setTimeout(window.print, 1000);
+    {% else %}
+        slist(document.getElementById('setlist'));
+        {% if all_songs %}
+        document.getElementById("add-song").onclick = function() {
+            let new_song = document.getElementById("song-picker");
+            let elt = document.createElement('li');
+            elt.id =  new_song.value;
+            elt.innerText = new_song.options[new_song.selectedIndex].text;
+            document.getElementById('setlist').appendChild(elt);
+            save_list();
+        };
+        {% endif %}
+        document.getElementById('set-order-button').onclick = function() {
+            if (confirm("Are you sure you want to re-arrange {{list.title}}?")) {
+                save_list();
+            }
+        };
+    {% endif %}
+});
+
+</script>
+{% endblock %}

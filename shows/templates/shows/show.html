@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="flex">
-    <div class="venue">
+    <div class="venue col">
         <h1><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h1>
         <h2>{{page.venue.city}}, {{page.venue.state}}</h2>
         <h2>{{page.start}}</h2>
@@ -25,7 +25,7 @@
         {% endif %}
     </div>
 
-    <div>
+    <div class="col">
     {% if page.set_list and not user.is_anonymous %}
     <h3><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
     <ol>

@@ -100,13 +100,14 @@ button:hover {
     <ol class="slist" id="setlist">
         {% for song in list.songs.all %}
         <li id="{{song.id}}">{{song}}
-            <div>
+            {% if not user.is_anonymous %}<div>
             <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="np">Edit</button>
             <button onclick="removeSong('{{song.id}}')" class="alert np">Delete</button>
-            </div>
+            </div>{% endif %}
         </li>
         {% endfor %}
     </ol>
+    {% if not user.is_anonymous %}
     {% if all_songs %}
     <select id="song-picker" class="np">
         {% for song in all_songs %}
@@ -115,7 +116,6 @@ button:hover {
     </select>
     <button id="add-song" class="np">Add</button>
     {% endif %}
-    <!-- <input type="text" name="add"> -->
     <div class="controls np flex">
         <button onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
         <button onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
@@ -123,10 +123,12 @@ button:hover {
         <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="alert">Duplicate</button>
     </div>
     {% endif %}
+    {% endif %}
     {% csrf_token %}
 {% endblock %}
 
 {% block extra_js %}
+{% if not user.is_anonymous %}
 <script type="text/javascript">
 
 function slist (target) {
@@ -235,4 +237,5 @@ window.addEventListener("load", function() {
 });
 
 </script>
+{% endif %}
 {% endblock %}

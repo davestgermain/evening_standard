@@ -107,5 +107,7 @@ ENV/
 
 whoosh_index/
 media/
+static/
 db.sqlite3
+evening_standard/settings/local.py
 

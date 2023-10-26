@@ -18,13 +18,14 @@ def show_setlist(request, list_id):
     context = {
         "list": songlist,
         "do_print": request.GET.get("print") == "1",
-        "all_songs": Song.objects.exclude(pk__in=[s.id for s in songlist.songs.all()])
+        "all_songs": Song.objects.exclude(pk__in=[s.id for s in songlist.songs.all()]),
     }
     return render(request, "setlist/setlist.html", context)
 
 
 def can_duplicate(user):
     return user.has_perm("setlist.add_setlist")
+
 
 def can_edit(user):
     return user.has_perm("setlist.change_setlist")
@@ -67,5 +68,7 @@ def edit_setlist(request, list_id):
     # add missing songs
     if new_order:
         for song_id, sort_order in new_order.items():
-            SetSong.objects.create(setlist=source, song_id=int(song_id), sort_order=sort_order)
+            SetSong.objects.create(
+                setlist=source, song_id=int(song_id), sort_order=sort_order
+            )
     return JsonResponse({"saved": True})

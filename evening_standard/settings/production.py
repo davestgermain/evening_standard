@@ -27,6 +27,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+ADMINS = [("Dave St.Germain", "dave@st.germa.in")]
+
 try:
     from .local import *
 except ImportError:

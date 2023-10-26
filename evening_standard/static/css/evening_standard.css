@@ -26,4 +26,11 @@ nav ul li {
 
 .venue {
     line-height: 1em;
+    text-align: center;
+    font-size: 2em;
+}
+.track {
+    cursor: pointer;
+    color: #E6844E;
+    margin-left: .25em;
 }

@@ -32,19 +32,56 @@
     </ol>
     <hr>
     {% endif %}
+    {% if page.recordings %}
     <div>
-        {% if page.recordings %}
-        <ol>
+        <h4 id="currently-playing"></h4>
+        <audio id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
+        <ol id="playlist">
             {% for recording in page.get_recording_docs %}
-            <li><a href="{{recording.url}}">{{recording.title}}</a></li>
+            <li data-src="{{recording.url}}" title="{{recording.title}}">
+                <a href="{{recording.url}}" title="download">&darr;</a>
+                <span class="track" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
+            </li>
             {% endfor %}
         </ol>
-        {% endif %}
+
+        <script type="text/javascript">
+            var currently_playing = document.getElementById('currently-playing');
+            var player = document.getElementById('player');
+            function playTrack(track, play) {
+                let item = document.getElementById('playlist').children[track];
+                player.src = item.getAttribute('data-src');
+                player.load();
+                if (play) {
+                    player.play();
+                }
+                player.setAttribute('data-track', track);
+                currently_playing.innerText = item.title;
+            }
+            function setup() {
+                var nodes = document.getElementById('playlist').children;
+
+                player.addEventListener('ended', function() {
+                    let track = parseInt(player.getAttribute('data-track'));
+                    track++;
+                    if (track == nodes.length)
+                    {
+                        track = 0;
+                    }
+                    playTrack(track, true);
+                    }, false);
+                playTrack(0, false);
+            }
+            setup();
+        </script>
+
     </div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<!--
 <script src = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 <script>
  // Creating map options
@@ -58,5 +95,5 @@
  
  map.addLayer(layer);
  </script>
-
+-->
 {% endblock %}

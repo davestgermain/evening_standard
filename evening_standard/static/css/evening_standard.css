@@ -2,6 +2,9 @@ body {
     font-family: sans-serif;
     padding-left: .5em;
 }
+h1,h2,h3,h4,h5,h6,h7 {
+    font-family: "Times New Roman", serif;
+}
 nav {
     border-bottom: 1px solid #ccc;
     padding-bottom: .5em;
@@ -29,8 +32,23 @@ nav ul li {
     text-align: center;
     font-size: 2em;
 }
+.venue p {
+    font-size: .8em;
+}
 .track {
     cursor: pointer;
     color: #E6844E;
     margin-left: .25em;
+}
+
+li.upcoming {
+    font-size: 2em;
+    list-style: none;
+    margin-bottom: 1em;
+    padding: 1em;
+    border-bottom: 1px dotted #ccc;
+}
+
+.show-index h1 {
+    text-align: center;
 }

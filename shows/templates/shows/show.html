@@ -16,10 +16,13 @@
         {% if not page.is_past %}
         <h3><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
 
-        <div id="my-map" style="width:400px; height:400px;"></div>
+        <!-- <div id="my-map" style="width:400px; height:400px;"></div> -->
         {% endif %}
 
+        {% if page.body %}
+        <hr>
         {{ page.body|richtext }}
+        {% endif %}
     </div>
 
     <div>
@@ -34,7 +37,7 @@
     {% endif %}
     {% if page.recordings %}
     <div>
-        <h4 id="currently-playing"></h4>
+        <h3 id="currently-playing"></h3>
         <audio id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
         <ol id="playlist">
             {% for recording in page.get_recording_docs %}

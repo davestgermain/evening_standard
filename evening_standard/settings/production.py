@@ -11,19 +11,19 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "naquag.forum@gmail.com"
 
-STATIC_ROOT = "/data/www/domains/eveningstandardjazz.com/static/"
-MEDIA_ROOT = "/data/www/domains/eveningstandardjazz.com/media/"
+STATIC_ROOT = "/data/www/eveningstandardjazz.com/static/"
+MEDIA_ROOT = "/data/www/eveningstandardjazz.com/media/"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "/data/www/domains/eveningstandardjazz.com/db.sqlite3",
+        "NAME": "/data/www/eveningstandardjazz.com/db.sqlite3",
     }
 }
 HAYSTACK_CONNECTIONS = {
     "default": {
         "ENGINE": "haystack.backends.whoosh_backend.WhooshEngine",
-        "PATH": "/data/www/domains/eveningstandardjazz.com/whoosh_index",
+        "PATH": "/data/www/eveningstandardjazz.com/whoosh_index",
     },
 }
 

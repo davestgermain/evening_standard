@@ -29,6 +29,9 @@ HAYSTACK_CONNECTIONS = {
 
 ADMINS = [("Dave St.Germain", "dave@st.germa.in")]
 
+WAGTAILDOCS_SERVE_METHOD = "redirect"
+
+
 try:
     from .local import *
 except ImportError:

@@ -41,13 +41,20 @@ class ShowIndex(Page):
         FieldPanel("body"),
     ]
 
-    def get_upcoming(self):
-        return Show.objects.filter(start__gte=timezone.now(), public=True).order_by(
-            "start"
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        shows = Show.objects.live().child_of(self)
+        upcoming = shows.filter(start__gte=timezone.now()).order_by("start")
+        if request.user.is_anonymous:
+            upcoming = upcoming.filter(public=True)
+        context["upcoming_shows"] = upcoming
+
+        context["past_shows"] = shows.filter(start__lt=timezone.now()).order_by(
+            "-start"
         )
 
-    def get_past(self):
-        return Show.objects.filter(start__lt=timezone.now()).order_by("-start")
+        return context
 
 
 class Show(Page):

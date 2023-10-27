@@ -4,20 +4,20 @@
 
 {% block content %}
 
-{% if page.get_upcoming %}
+{% if upcoming_shows %}
 <h1>Upcoming</h1>
 <ul>
-    {% for show in page.get_upcoming %}
+    {% for show in upcoming_shows %}
     <li class="upcoming">{{show.start}} at <a href="{{show.url}}">{{show.venue}}</a></li>
     {% endfor %}
 </ul>
 <hr>
 {% endif %}
 
-{% if page.get_past %}
+{% if past_shows %}
 <h1>Past</h1>
 <ul>
-    {% for show in page.get_past %}
+    {% for show in past_shows %}
     <li><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
     {% endfor %}
 </ul>

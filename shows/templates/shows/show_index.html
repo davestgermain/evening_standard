@@ -4,23 +4,28 @@
 
 {% block content %}
 
+<div class="columns">
 {% if upcoming_shows %}
-<h1>Upcoming</h1>
-<ul>
-    {% for show in upcoming_shows %}
-    <li class="upcoming">{{show.start}} at <a href="{{show.url}}">{{show.venue}}</a></li>
-    {% endfor %}
-</ul>
-<hr>
+    <div class="column has-text-centered">
+        <h1 class="title is-1">Upcoming</h1>
+        <ul>
+            {% for show in upcoming_shows %}
+            <li class="subtitle is-2">{{show.start|date:"F jS Y @ P"}}<br><a href="{{show.url}}">{{show.venue}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}
 
 {% if past_shows %}
-<h1>Past</h1>
-<ul>
-    {% for show in past_shows %}
-    <li><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
-    {% endfor %}
-</ul>
-{% endif %}
+    <div class="column has-text-centered">
 
+        <h1 class="title is-1">Past</h1>
+        <ul>
+            {% for show in past_shows %}
+            <li class="subtitle is-4"><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+</div>
 {% endblock %}

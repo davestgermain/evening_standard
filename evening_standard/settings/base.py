@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "mptt",
     "haystack",
     "widget_tweaks",
+    "bulma",
     # Machina apps:
     "machina",
     "machina.apps.forum",

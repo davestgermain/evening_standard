@@ -1,8 +1,7 @@
-{% load static wagtailcore_tags wagtailuserbar %}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    {% load static wagtailcore_tags wagtailuserbar %}
         <meta charset="utf-8" />
         <title>
             {% block title %}
@@ -24,7 +23,8 @@
         {% endif %}
 
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/evening_standard.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bulma.min.css' %}">
+        <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/evening_standard.css' %}"> -->
 
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -33,20 +33,65 @@
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
-        <a id="logolink" href="/"><img src="{% static 'img/logo.jpg' %}" alt="The Evening Standard" /></a>
-        <nav>
-            <ul>
-                <li><a href="/contact/">Contact</a></li>
-                <li><a href="/shows/">Shows</a></li>
-                <li><a href="/recordings/">Recordings</a></li>
-                {% if not user.is_anonymous %}
-                <li><a href="/setlist/">Set Lists</a></li>
-                <li><a href="/forum/">Discussion</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% block content %}{% endblock %}
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <img src="{% static 'img/logo.jpg' %}" alt="The Evening Standard" />
+    </a>
 
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="the-navbar">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="the-navbar" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="/">
+        Home
+      </a>
+
+      <a class="navbar-item" href="/contact/">
+        Contact
+      </a>
+      <a class="navbar-item" href="/shows/">
+        Shows
+      </a>
+      <a class="navbar-item" href="/recordings/">
+        Recordings
+      </a>
+
+    {% if not user.is_anonymous %}
+      <div class="ml-4 navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/setlist/">
+            Set Lists
+          </a>
+          <a class="navbar-item" href="/forum/">
+            Discussion
+          </a>
+          <a class="navbar-item" href="/admin/">
+            Admin
+          </a>
+          <a class="navbar-item" href="/django-admin/">
+            Django Admin
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    </div>
+    </div>
+</nav>
+
+    <div class="container pl-4">
+        {% block content %}{% endblock %}
+    </div>
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/evening_standard.js' %}"></script>
 

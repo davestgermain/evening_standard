@@ -5,11 +5,15 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-    <h1>Set Lists</h1>
-    <ul>
-        {% for list in lists %}
-        <li><a href="/setlist/{{list.id}}/">{{list}}</a></li>
-        {% endfor %}
-    </ul>
+<div class="columns">
+    <div class="column">
+        <h1 class="title is-1">Set Lists</h1>
+        <ul class="is-size-2">
+            {% for list in lists %}
+            <li><a href="/setlist/{{list.id}}/">{{list}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}
 

@@ -39,7 +39,6 @@
 #song-picker {
     font-size: 1.6em;
     width: 400px;
-/*    border: none;*/
     text-align: center;
     margin-right: 20px;
 }
@@ -50,7 +49,7 @@ p {
     border-bottom: 1px dotted #ccc;
     padding-bottom: 10px;
 }
-button {
+/*button {
     width: 80px;
     padding: 5px;
     background: #7196DC;
@@ -67,7 +66,7 @@ button:hover {
     background: #ACBDDC;
     color: #000;
 }
-@media print {
+*/@media print {
     h1 {
         text-align: center;
     }
@@ -93,16 +92,16 @@ button:hover {
         {% endfor %}
     {% endfor %}
     {% else %}
-    <h1>{{list.title}}</h1>
+    <h1 class="title">{{list.title}}</h1>
     {% if list.notes %}
-    <p>{{list.notes}}</p>
+    <p class="content">{{list.notes}}</p>
     {% endif %}
     <ol class="slist" id="setlist">
         {% for song in list.songs.all %}
         <li id="{{song.id}}">{{song}}
             {% if not user.is_anonymous %}<div>
-            <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="np">Edit</button>
-            <button onclick="removeSong('{{song.id}}')" class="alert np">Delete</button>
+            <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
+            <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
             </div>{% endif %}
         </li>
         {% endfor %}
@@ -114,13 +113,13 @@ button:hover {
         <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
         {% endfor %}
     </select>
-    <button id="add-song" class="np">Add</button>
+    <button id="add-song" class="button is-small np">Add</button>
     {% endif %}
     <div class="controls np flex">
-        <button onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
-        <button onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
-        <button id="set-order-button" class="alert" style="display:none">Save</button>
-        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="alert">Duplicate</button>
+        <button class="button" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
+        <button class="button" onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
+        <button id="set-order-button" class="button alert" style="display:none">Save</button>
+        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button alert">Duplicate</button>
     </div>
     {% endif %}
     {% endif %}

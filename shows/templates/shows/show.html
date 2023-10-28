@@ -8,13 +8,14 @@
 {% block body_class %}show-page{% endblock %}
 
 {% block content %}
-<div class="flex">
-    <div class="venue col">
-        <h1><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h1>
-        <h2>{{page.venue.city}}, {{page.venue.state}}</h2>
-        <h2>{{page.start}}</h2>
+<div class="columns">
+    <div class="column has-text-centered">
+        <h1 class="title is-2">{{page.start|date:"l, F jS"}}</h1>
+        {% if not page.is_past %}<h2 class="subtitle is-2">{{page.start|date:"P"}}</h2>{% endif %}
+        <h2 class="subtitle is-2"><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h1>
+        <h2 class="subtitle is-3">{{page.venue.city}}, {{page.venue.state}}</h2>
         {% if not page.is_past %}
-        <h3><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
+        <h3 class="subtitle is-4"><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
 
         <!-- <div id="my-map" style="width:400px; height:400px;"></div> -->
         {% endif %}
@@ -25,19 +26,10 @@
         {% endif %}
     </div>
 
-    <div class="col">
-    {% if page.set_list and not user.is_anonymous %}
-    <h3><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
-    <ol>
-        {% for song in page.set_list.songs.all %}
-        <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
-        {% endfor %}
-    </ol>
-    <hr>
-    {% endif %}
+    <div class="column">
     {% if page.recordings %}
     <div>
-        <h3 id="currently-playing"></h3>
+        <h3 id="currently-playing" class="subtitle"></h3>
         <audio id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
         <ol id="playlist">
             {% for recording in page.get_recording_docs %}
@@ -80,6 +72,17 @@
 
     </div>
     {% endif %}
+        {% if page.set_list and not user.is_anonymous %}
+    <h3><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
+    <ol>
+        {% for song in page.set_list.songs.all %}
+        <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
+        {% endfor %}
+    </ol>
+    <hr>
+    {% endif %}
+
+    </div>
 </div>
 {% endblock %}
 

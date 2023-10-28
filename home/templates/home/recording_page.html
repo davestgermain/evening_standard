@@ -5,9 +5,10 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
+<div class="content is-size-3">
     {{ page.body|richtext }}
-
-    <ul>
+</div>
+    <ul class="is-size-3">
     {% for show in page.get_shows_with_recordings %}
     <li><a href="{{show.url}}">{{show}}</a></li>
     {% endfor %}

@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_Store
 
 # C extensions
 *.so
@@ -107,7 +108,7 @@ ENV/
 
 whoosh_index/
 media/
-static/
+./static/
 db.sqlite3
 evening_standard/settings/local.py
 

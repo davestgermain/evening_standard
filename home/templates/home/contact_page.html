@@ -4,48 +4,8 @@
 
 {% block extra_css %}
 <style>
-    h1 {
-        text-align: center;
-    }
-    form {
-        display: flex;
-        flex-direction: column;
-        max-width: 80%;
-        margin-left: auto;
-        justify-content: center;
-    }
-    form p {
-        display: flex; 
-        margin: 10px;
-   }
-    form label {
-        font-weight: bold;
-        font-size: 1.5em;
-        width: 15%;
-    }
-    form input,textarea {
-        font-size: 1.5em;
-        width: 50%;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    form textarea {
+    textarea {
         height: 100px;
-    }
-    input[type=submit] {
-        border: 1px solid #000;
-        background-color: #ACBDDC;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    input[type=submit]:hover {
-        background-color: #5282DC;
-    }
-    .helptext {
-        visibility: hidden;
-    }
-    .centered {
-        margin-left: 10%;
     }
 </style>
 {% endblock %}
@@ -53,13 +13,21 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-    <h1>{{page.title}}</h1>
-    <form action="{% pageurl page %}" method="POST">
-        {{ page.intro|richtext }}
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p class="centered"><input type="submit" value="Send"></p>
-    </form>
+{% load bulma_tags %}
+
+    <h1 class="title">{{page.title}}</h1>
+    <div class="columns">
+        <div class="column is-half">
+            <form action="{% pageurl page %}" method="POST" class="mb-6 ">
+                <div class="content">{{ page.intro|richtext }}</div>
+                {% csrf_token %}
+                {{ form|bulma }}
+                <div class="field has-text-centered">
+                    <input type="submit" value="Send" class="button is-primary is-large is-fullwidth">
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
 

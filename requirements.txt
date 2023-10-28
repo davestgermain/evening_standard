@@ -3,3 +3,4 @@ wagtail>=5.1,<5.2
 django-machina
 whoosh
 django-watchfiles
+django-bulma

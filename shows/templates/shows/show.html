@@ -7,30 +7,18 @@
     li.recording-item {
         cursor: pointer;
     }
+    audio {
+        width: 100%;
+    }
 </style>
 {% endblock %}
 
 {% block body_class %}show-page{% endblock %}
 
 {% block content %}
-<div class="columns">
-    <div class="column has-text-centered">
-        <h1 class="title is-2">{{page.start|date:"l, F jS"}}</h1>
-        {% if not page.is_past %}<h2 class="subtitle is-2">{{page.start|date:"P"}}</h2>{% endif %}
-        <h2 class="subtitle is-2"><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h1>
-        <h2 class="subtitle is-3">{{page.venue.city}}, {{page.venue.state}}</h2>
-        {% if not page.is_past %}
-        <h3 class="subtitle is-4"><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
-        {% endif %}
-
-        {% if page.body %}
-        <hr>
-        {{ page.body|richtext }}
-        {% endif %}
-    </div>
-
-    {% if page.recordings or not user.is_anonymous %}
-    <div class="column is-three-fifths">
+<div class="columns mt-3">
+    {% if page.recordings %}
+    <div class="column is-two-thirds">
         {% if page.recordings %}
         <div class="box">
             <h3 id="currently-playing" class="subtitle"></h3>
@@ -39,59 +27,83 @@
                 {% for recording in page.get_recording_docs %}
                 <li class="recording-item has-background-light" data-src="{{recording.url}}" title="{{recording.title}}">
                     <a href="{{recording.url}}" title="download">&darr;</a>
-                    <span class="track has-text-success-dark" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
+                    <span class="track has-text-success-dark is-size-5 ml-2" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
                 </li>
                 {% endfor %}
             </ul>
-
-            <script type="text/javascript">
-                var currently_playing = document.getElementById('currently-playing');
-                var player = document.getElementById('player');
-                function playTrack(track, play) {
-                    let item = document.getElementById('playlist').children[track];
-                    player.src = item.getAttribute('data-src');
-                    player.load();
-                    if (play) {
-                        player.play();
-                    }
-                    player.setAttribute('data-track', track);
-                    currently_playing.innerText = item.title;
-                }
-                function setup() {
-                    var nodes = document.getElementById('playlist').children;
-
-                    player.addEventListener('ended', function() {
-                        let track = parseInt(player.getAttribute('data-track'));
-                        track++;
-                        if (track == nodes.length)
-                        {
-                            track = 0;
-                        }
-                        playTrack(track, true);
-                        }, false);
-                    playTrack(0, false);
-                }
-                setup();
-            </script>
-
         </div>
         <hr>
         {% endif %}
-    {% endif %}
-        {% if page.set_list and not user.is_anonymous %}
-    <h3 class="subtitle mt-4"><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
-    <ol class=" ml-4">
-        {% for song in page.set_list.songs.all %}
-        <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
-        {% endfor %}
-    </ol>
     </div>
     {% endif %}
+    <div class="column has-text-centered">
+        <div class="card">
+            <div class="card mb-6 has-background-info-light">
+                <div class="card-content">
 
+                    <h1 class="title is-2">{{page.start|date:"l, F jS"}} {% if page.is_past %}{{page.start|date:"Y" }}{% endif %}</h1>
+                    {% if not page.is_past %}<h2 class="subtitle is-2">{{page.start|date:"P"}}</h2>{% endif %}
+                    <h2 class="subtitle is-2"><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h2>
+                    <h2 class="subtitle is-3">{{page.venue.city}}, {{page.venue.state}}</h2>
+
+                    {% if page.body %}
+                    <hr>
+                    {{ page.body|richtext }}
+                    {% endif %}
+                </div>
+                <footer class="card-footer">
+                    {% if not page.is_past %}
+                    <a class="card-footer-item" href="{{page.venue.map_url}}" target="_new">Directions</a>
+                    {% endif %}
+                </footer>
+            </div>
+        </div>
+        {% if page.set_list and not user.is_anonymous %}
+        <div class="box has-text-left">
+            <h3 class="subtitle mt-4"><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
+            <ol class="ml-5">
+            {% for song in page.set_list.songs.all %}
+                <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
+            {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+{% if page.recordings %}
+<script type="text/javascript">
+    var currently_playing = document.getElementById('currently-playing');
+    var player = document.getElementById('player');
+    function playTrack(track, play) {
+        let item = document.getElementById('playlist').children[track];
+        player.src = item.getAttribute('data-src');
+        player.load();
+        if (play) {
+            player.play();
+        }
+        player.setAttribute('data-track', track);
+        currently_playing.innerText = item.title;
+    }
+    function setup() {
+        var nodes = document.getElementById('playlist').children;
+
+        player.addEventListener('ended', function() {
+            let track = parseInt(player.getAttribute('data-track'));
+            track++;
+            if (track == nodes.length)
+            {
+                track = 0;
+            }
+            playTrack(track, true);
+            }, false);
+        playTrack(0, false);
+    }
+    setup();
+</script>
+{% endif %}
 <!--
 <script src = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 <script>

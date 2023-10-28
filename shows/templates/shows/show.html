@@ -2,7 +2,12 @@
 {% load wagtailcore_tags %}
 
 {% block extra_css %}
-<link rel = "stylesheet" href = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<!-- <link rel = "stylesheet" href = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /> -->
+<style>
+    li.recording-item {
+        cursor: pointer;
+    }
+</style>
 {% endblock %}
 
 {% block body_class %}show-page{% endblock %}
@@ -16,8 +21,6 @@
         <h2 class="subtitle is-3">{{page.venue.city}}, {{page.venue.state}}</h2>
         {% if not page.is_past %}
         <h3 class="subtitle is-4"><a href="{{page.venue.map_url}}" target="_new">Directions</a></h3>
-
-        <!-- <div id="my-map" style="width:400px; height:400px;"></div> -->
         {% endif %}
 
         {% if page.body %}
@@ -26,63 +29,65 @@
         {% endif %}
     </div>
 
-    <div class="column">
-    {% if page.recordings %}
-    <div>
-        <h3 id="currently-playing" class="subtitle"></h3>
-        <audio id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
-        <ol id="playlist">
-            {% for recording in page.get_recording_docs %}
-            <li data-src="{{recording.url}}" title="{{recording.title}}">
-                <a href="{{recording.url}}" title="download">&darr;</a>
-                <span class="track" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
-            </li>
-            {% endfor %}
-        </ol>
+    {% if page.recordings or not user.is_anonymous %}
+    <div class="column is-three-fifths">
+        {% if page.recordings %}
+        <div class="box">
+            <h3 id="currently-playing" class="subtitle"></h3>
+            <audio class="media" id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
+            <ul id="playlist" class="content pl-2 pt-3">
+                {% for recording in page.get_recording_docs %}
+                <li class="recording-item has-background-light" data-src="{{recording.url}}" title="{{recording.title}}">
+                    <a href="{{recording.url}}" title="download">&darr;</a>
+                    <span class="track has-text-success-dark" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
+                </li>
+                {% endfor %}
+            </ul>
 
-        <script type="text/javascript">
-            var currently_playing = document.getElementById('currently-playing');
-            var player = document.getElementById('player');
-            function playTrack(track, play) {
-                let item = document.getElementById('playlist').children[track];
-                player.src = item.getAttribute('data-src');
-                player.load();
-                if (play) {
-                    player.play();
-                }
-                player.setAttribute('data-track', track);
-                currently_playing.innerText = item.title;
-            }
-            function setup() {
-                var nodes = document.getElementById('playlist').children;
-
-                player.addEventListener('ended', function() {
-                    let track = parseInt(player.getAttribute('data-track'));
-                    track++;
-                    if (track == nodes.length)
-                    {
-                        track = 0;
+            <script type="text/javascript">
+                var currently_playing = document.getElementById('currently-playing');
+                var player = document.getElementById('player');
+                function playTrack(track, play) {
+                    let item = document.getElementById('playlist').children[track];
+                    player.src = item.getAttribute('data-src');
+                    player.load();
+                    if (play) {
+                        player.play();
                     }
-                    playTrack(track, true);
-                    }, false);
-                playTrack(0, false);
-            }
-            setup();
-        </script>
+                    player.setAttribute('data-track', track);
+                    currently_playing.innerText = item.title;
+                }
+                function setup() {
+                    var nodes = document.getElementById('playlist').children;
 
-    </div>
+                    player.addEventListener('ended', function() {
+                        let track = parseInt(player.getAttribute('data-track'));
+                        track++;
+                        if (track == nodes.length)
+                        {
+                            track = 0;
+                        }
+                        playTrack(track, true);
+                        }, false);
+                    playTrack(0, false);
+                }
+                setup();
+            </script>
+
+        </div>
+        <hr>
+        {% endif %}
     {% endif %}
         {% if page.set_list and not user.is_anonymous %}
-    <h3><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
-    <ol>
+    <h3 class="subtitle mt-4"><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
+    <ol class=" ml-4">
         {% for song in page.set_list.songs.all %}
         <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
         {% endfor %}
     </ol>
-    <hr>
+    </div>
     {% endif %}
 
-    </div>
 </div>
 {% endblock %}
 

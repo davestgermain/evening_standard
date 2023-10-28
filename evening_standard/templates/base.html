@@ -32,11 +32,10 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
-        {% wagtailuserbar %}
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light has-shadow" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
-      <img src="{% static 'img/logo.jpg' %}" alt="The Evening Standard" />
+      <img src="{% static 'img/logo-transparent.png' %}" alt="The Evening Standard" />
     </a>
 
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="the-navbar">
@@ -51,15 +50,14 @@
       <a class="navbar-item" href="/">
         Home
       </a>
-
-      <a class="navbar-item" href="/contact/">
-        Contact
-      </a>
       <a class="navbar-item" href="/shows/">
         Shows
       </a>
       <a class="navbar-item" href="/recordings/">
         Recordings
+      </a>
+      <a class="navbar-item" href="/contact/">
+        Contact
       </a>
 
     {% if not user.is_anonymous %}
@@ -88,10 +86,11 @@
     </div>
     </div>
 </nav>
-
-    <div class="container ml-4 mr-4 mb-6">
+    <div class="container ml-4 mr-4 mb-6 mt-2">
         {% block content %}{% endblock %}
     </div>
+            {% wagtailuserbar %}
+
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/evening_standard.js' %}"></script>
 

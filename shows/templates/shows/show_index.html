@@ -6,23 +6,26 @@
 
 <div class="columns">
 {% if upcoming_shows %}
-    <div class="column has-text-centered">
+    <div class="column has-text-centered is-two-thirds">
         <h1 class="title is-1">Upcoming</h1>
-        <ul>
-            {% for show in upcoming_shows %}
-            <li class="subtitle is-2">{{show.start|date:"F jS Y @ P"}}<br><a href="{{show.url}}">{{show.venue}}</a></li>
-            {% endfor %}
-        </ul>
+        {% for show in upcoming_shows %}
+            <div class="card mb-6 has-background-info-light">
+                <div class="card-content">
+                    <p class="title"><a href="{{show.url}}">{{show.start|date:"F jS Y @ P"}}</a></p>
+                    <p class="subtitle">{{show.venue}}</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endif %}
 
 {% if past_shows %}
     <div class="column has-text-centered">
 
-        <h1 class="title is-1">Past</h1>
+        <h1 class="title is-2">Past</h1>
         <ul>
             {% for show in past_shows %}
-            <li class="subtitle is-4"><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
+            <li class="subtitle is-5"><a href="{{show.url}}">{{show.start.date}} @ {{show.venue}}</a> </li>
             {% endfor %}
         </ul>
     </div>

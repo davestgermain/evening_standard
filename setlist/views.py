@@ -18,7 +18,9 @@ def show_setlist(request, list_id):
     context = {
         "list": songlist,
         "do_print": request.GET.get("print") == "1",
-        "all_songs": Song.objects.exclude(pk__in=[s.id for s in songlist.songs.all()]),
+        "all_songs": Song.objects.exclude(
+            pk__in=[s.id for s in songlist.songs.all()]
+        ).order_by("title"),
     }
     return render(request, "setlist/setlist.html", context)
 

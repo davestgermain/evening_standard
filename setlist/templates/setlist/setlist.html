@@ -16,13 +16,12 @@
   border: 1px solid #dfdfdf;
   background: #f5f5f5;
   cursor: pointer;
-  width: 600px;
   font-size: 1.5em;
   display: flex;
   justify-content: space-between;
+  max-width: 600px;
 }
 
-/* (B) DRAG-AND-DROP HINT */
 .slist li.hint {
   border: 1px solid #ffc49a;
   background: #feffb4;
@@ -31,27 +30,14 @@
   border: 1px solid #ffa5a5;
   background: #ffe7e7;
 }
-.controls {
-    padding-top: 10px;
-    margin-top: 10px;
-    border-top: 1px dotted #ccc;
-}
-#song-picker {
-    font-size: 1.6em;
-    width: 400px;
-    text-align: center;
-    margin-right: 20px;
-}
-#song-picker option {
-    border:none;
-}
-p {
-    border-bottom: 1px dotted #ccc;
-    padding-bottom: 10px;
-}
+
+
 @media print {
 
     nav,button,select,wagtail-userbar {
+        display: none;
+    }
+    .buttons,.field,.control,.delete {
         display: none;
     }
     h1 {
@@ -85,32 +71,46 @@ p {
     {% else %}
     <h1 class="title">{{list.title}}</h1>
     {% if list.notes %}
-    <p class="content">{{list.notes}}</p>
+    <div class="content">
+        {{list.notes|richtext}}
+        <hr>
+    </div>
     {% endif %}
     <ol class="slist" id="setlist">
         {% for song in list.songs.all %}
-        <li id="{{song.id}}">{{song}}
-            {% if not user.is_anonymous %}<div>
+        <li id="{{song.id}}" class="">{{song}}
+            {% if not user.is_anonymous %}
+            <div class="controls">
             <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
             <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
-            </div>{% endif %}
+            </div>
+            {% endif %}
         </li>
         {% endfor %}
     </ol>
     {% if not user.is_anonymous %}
     {% if all_songs %}
-    <select id="song-picker">
-        {% for song in all_songs %}
-        <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
-        {% endfor %}
-    </select>
-    <button id="add-song" class="button is-small np">Add</button>
+    <div class="field has-addons ml-2">
+        <div class="control">
+            <div class="select">
+                <select id="song-picker">
+                    {% for song in all_songs %}
+                    <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="control">
+            <button id="add-song" class="button np">Add</button>
+        </div>
+    </div>
     {% endif %}
-    <div class="controls np flex mb-4">
-        <button class="button" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
+    <hr/>
+    <div class="buttons ml-2 mt-5">
+        <button id="set-order-button" class="button is-success" style="display:none">Save</button>
+        <button class="button is-info" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
         <button class="button" onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
-        <button id="set-order-button" class="button alert" style="display:none">Save</button>
-        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button alert">Duplicate</button>
+        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button is-warning">Duplicate</button>
     </div>
     {% endif %}
     {% endif %}

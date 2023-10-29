@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "haystack",
     "widget_tweaks",
     "bulma",
+    "captcha",
+    "wagtailcaptcha",
     # Machina apps:
     "machina",
     "machina.apps.forum",
@@ -213,3 +215,7 @@ WAGTAILADMIN_BASE_URL = "https://eveningstandardjazz.com"
 WAGTAIL_SITE_NAME = "The Evening Standard"
 
 DEFAULT_FROM_EMAIL = "naquag.forum@gmail.com"
+
+NOCAPTCHA = True
+RECAPTCHA_PUBLIC_KEY = ""
+RECAPTCHA_PRIVATE_KEY = ""

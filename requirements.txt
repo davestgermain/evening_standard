@@ -4,3 +4,4 @@ django-machina
 whoosh
 django-watchfiles
 django-bulma
+wagtail-django-recaptcha

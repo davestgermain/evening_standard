@@ -11,6 +11,8 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+
 INSTALLED_APPS += [
     "django_watchfiles",
 ]

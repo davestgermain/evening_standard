@@ -94,8 +94,9 @@
                 <li id="{{song.id}}" class="">{{song}}
                     {% if not user.is_anonymous %}
                     <div class="controls">
-                    <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
-                    <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
+                        <button onclick="location='/setlist/song/{{song.id}}/'" class="button is-small is-rounded np">View</button>
+                        <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
+                        <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
                     </div>
                     {% endif %}
                 </li>

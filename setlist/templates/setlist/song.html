@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block title %}{{song.title}} charts{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+    img {
+        height: 100vh;
+    }
+</style>
+{% endblock %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<div class="columns">
+    <div class="column">
+        <h1 class="title is-1 np">{{song.title}}</h1>
+        {% if song.notes %}<h2>{{song.notes}}</h2>{% endif %}
+        {% for chart in song.charts.all %}
+        <img src="{{chart.file.url}}">
+        {% endfor %}
+        <section class="np">
+        <hr>
+        <h2 class="subtitle has-text-centered">Set Lists Containing</h2>
+        <ul class="mb-4 has-text-centered">
+        {% for setlist in used_in %}
+            <li><a href="/setlist/{{setlist.id}}/">{{setlist}}</a></li>
+        {% endfor %}
+        </ul>
+
+        <a href="/django-admin/setlist/song/{{song.id}}/change/" class="button is-primary is-large is-fullwidth">Edit</a>
+        </section>
+    </div>
+</div>
+{% endblock %}
+

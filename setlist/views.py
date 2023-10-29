@@ -25,6 +25,16 @@ def show_setlist(request, list_id):
     return render(request, "setlist/setlist.html", context)
 
 
+def show_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    used_in = song.setlist_set.all()
+    context = {
+        "song": song,
+        "used_in": used_in,
+    }
+    return render(request, "setlist/song.html", context)
+
+
 def can_duplicate(user):
     return user.has_perm("setlist.add_setlist")
 

@@ -31,7 +31,13 @@
   background: #ffe7e7;
 }
 
-
+#functions {
+    position: sticky;
+    display: inline-block;
+    vertical-align: top;
+    max-height: 100vh;
+    overflow-y: auto;
+}
 @media print {
 
     nav,button,select,wagtail-userbar {
@@ -55,6 +61,9 @@
         display: list-item;
         list-style-type: decimal;
     }
+    #functions {
+        display: none;
+    }
 }
 </style>
 {% endblock %}
@@ -76,43 +85,48 @@
         <hr>
     </div>
     {% endif %}
-    <ol class="slist" id="setlist">
-        {% for song in list.songs.all %}
-        <li id="{{song.id}}" class="">{{song}}
-            {% if not user.is_anonymous %}
-            <div class="controls">
-            <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
-            <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
+    <div class="columns">
+        <div class="column">
+            <ol class="slist" id="setlist">
+                {% for song in list.songs.all %}
+                <li id="{{song.id}}" class="">{{song}}
+                    {% if not user.is_anonymous %}
+                    <div class="controls">
+                    <button onclick="location='/django-admin/setlist/song/{{song.id}}/change/'" class="button is-small is-rounded np">Edit</button>
+                    <button onclick="removeSong('{{song.id}}')" class="delete">Delete</button>
+                    </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% if not user.is_anonymous %}
+        <div class="column mt-2" id="functions">
+            {% if all_songs %}
+            <div class="field has-addons ml-2">
+                <div class="control">
+                    <div class="select">
+                        <select id="song-picker">
+                            {% for song in all_songs %}
+                            <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="control">
+                    <button id="add-song" class="button np">Add</button>
+                </div>
             </div>
             {% endif %}
-        </li>
-        {% endfor %}
-    </ol>
-    {% if not user.is_anonymous %}
-    {% if all_songs %}
-    <div class="field has-addons ml-2">
-        <div class="control">
-            <div class="select">
-                <select id="song-picker">
-                    {% for song in all_songs %}
-                    <option name="{{song.title}}" value="{{song.id}}">{{song.title}}</option>
-                    {% endfor %}
-                </select>
+            <div class="buttons ml-2 mt-2">
+                <button id="set-order-button" class="button is-success" style="display:none">Save</button>
+                <button class="button is-info" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
+                <button class="button" onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
+                <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button is-warning">Duplicate</button>
             </div>
         </div>
-        <div class="control">
-            <button id="add-song" class="button np">Add</button>
-        </div>
-    </div>
     {% endif %}
-    <hr/>
-    <div class="buttons ml-2 mt-5">
-        <button id="set-order-button" class="button is-success" style="display:none">Save</button>
-        <button class="button is-info" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
-        <button class="button" onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
-        <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button is-warning">Duplicate</button>
     </div>
-    {% endif %}
     {% endif %}
     {% csrf_token %}
 {% endblock %}

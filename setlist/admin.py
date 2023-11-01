@@ -21,6 +21,7 @@ num_songs.short_description = "Number of Songs"
 class SetSongInline(admin.TabularInline):
     model = models.SetSong
     extra = 1
+    autocomplete_fields = ["song"]
 
 
 class SetListAdmin(admin.ModelAdmin):
@@ -29,6 +30,7 @@ class SetListAdmin(admin.ModelAdmin):
 
 
 class SongAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
     autocomplete_fields = ["charts"]
     list_display = ["title", num_charts]
 

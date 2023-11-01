@@ -13,6 +13,9 @@ class Song(models.Model):
     notes = models.TextField(blank=True)
     charts = models.ManyToManyField(Image, blank=True)
 
+    class Meta:
+        ordering = ("title",)
+
     def __str__(self):
         return self.title
 

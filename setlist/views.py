@@ -15,10 +15,11 @@ def show_setlists(request):
 
 def show_setlist(request, list_id):
     songlist = get_object_or_404(SetList, pk=list_id)
+    is_authenticated = request.user.is_authenticated
     context = {
-        "can_change": request.user.is_authenticated,
+        "can_change": is_authenticated,
         "list": songlist,
-        "do_print": request.GET.get("print") == "1",
+        "do_print": is_authenticated and request.GET.get("print") == "1",
         "all_songs": Song.objects.exclude(
             pk__in=[s.id for s in songlist.songs.all()]
         ).order_by("title"),
@@ -33,6 +34,7 @@ def show_song(request, song_id):
         "can_change": request.user.is_authenticated,
         "song": song,
         "used_in": used_in,
+        "is_authenticated": request.user.is_authenticated,
     }
     return render(request, "setlist/song.html", context)
 

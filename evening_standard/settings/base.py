@@ -24,10 +24,6 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    "home",
-    "search",
-    "shows",
-    "setlist",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -66,6 +62,10 @@ INSTALLED_APPS = [
     "machina.apps.forum_tracking",
     "machina.apps.forum_member",
     "machina.apps.forum_permission",
+    "home",
+    "search",
+    "shows",
+    "setlist",
 ]
 
 MIDDLEWARE = [

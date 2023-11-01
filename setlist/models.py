@@ -28,6 +28,9 @@ class SetList(models.Model):
     notes = models.TextField(blank=True)
     songs = models.ManyToManyField(Song, through="SetSong")
 
+    def get_ordered_songs(self):
+        return self.songs.order_by("setsong__sort_order")
+
     def get_absolute_url(self):
         return f"/setlist/{self.id}/"
 

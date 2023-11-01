@@ -90,7 +90,7 @@
     <div class="columns is-multiline">
         <div class="column is-two-thirds">
             <ol class="slist" id="setlist">
-                {% for song in list.songs.all %}
+                {% for song in list.get_ordered_songs %}
                 <li id="{{song.id}}" class="">{{song}}
                     {% if not user.is_anonymous %}
                     <div class="controls">

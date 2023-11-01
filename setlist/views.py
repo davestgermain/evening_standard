@@ -16,6 +16,7 @@ def show_setlists(request):
 def show_setlist(request, list_id):
     songlist = get_object_or_404(SetList, pk=list_id)
     context = {
+        "can_change": request.user.is_authenticated,
         "list": songlist,
         "do_print": request.GET.get("print") == "1",
         "all_songs": Song.objects.exclude(
@@ -29,6 +30,7 @@ def show_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     used_in = song.setlist_set.all()
     context = {
+        "can_change": request.user.is_authenticated,
         "song": song,
         "used_in": used_in,
     }

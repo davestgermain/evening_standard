@@ -23,7 +23,7 @@
         {% endfor %}
         <section class="np has-text-centered">
         <hr>
-        {% if song.recordings %}
+        {% if song.recordings.exists %}
         <h2 class="subtitle">Recordings</h2>
         <ul class="content">{% for doc in song.recordings.all %}
             <li><a href="{{doc.url}}">{{doc.title}}</a> from {{doc.collection}}</li>
@@ -37,7 +37,9 @@
         {% endfor %}
         </ul>
 
+        {% if can_change %}
         <a href="/django-admin/setlist/song/{{song.id}}/change/" class="button is-primary is-large is-fullwidth">Edit</a>
+        {% endif %}
         </section>
     </div>
 </div>

@@ -1,5 +1,6 @@
 from wagtail.models import Page, Collection
 from wagtail.images.models import Image
+from wagtail.documents.models import Document
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 
@@ -12,6 +13,7 @@ class Song(models.Model):
     key = models.CharField(max_length=4, blank=True, null=True)
     notes = models.TextField(blank=True)
     charts = models.ManyToManyField(Image, blank=True)
+    recordings = models.ManyToManyField(Document, blank=True)
 
     class Meta:
         ordering = ("title",)

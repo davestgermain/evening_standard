@@ -21,9 +21,16 @@
         {% for chart in song.charts.all %}
         <img src="{{chart.file.url}}">
         {% endfor %}
-        <section class="np">
+        <section class="np has-text-centered">
         <hr>
-        <h2 class="subtitle has-text-centered">Set Lists Containing</h2>
+        {% if song.recordings %}
+        <h2 class="subtitle">Recordings</h2>
+        <ul class="content">{% for doc in song.recordings.all %}
+            <li><a href="{{doc.url}}">{{doc.title}}</a> from {{doc.collection}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <h2 class="subtitle mt-2">Set Lists Containing</h2>
         <ul class="mb-4 has-text-centered">
         {% for setlist in used_in %}
             <li><a href="/setlist/{{setlist.id}}/">{{setlist}}</a></li>

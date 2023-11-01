@@ -1,5 +1,6 @@
 from django.contrib import admin
 from wagtail.images.models import Image
+from wagtail.documents.models import Document
 
 from . import models
 
@@ -31,12 +32,13 @@ class SetListAdmin(admin.ModelAdmin):
 
 class SongAdmin(admin.ModelAdmin):
     search_fields = ["title"]
-    autocomplete_fields = ["charts"]
+    autocomplete_fields = ["charts", "recordings"]
     list_display = ["title", num_charts]
 
     fields = [
         "title",
         "charts",
+        "recordings",
         "key",
         "notes",
     ]
@@ -46,14 +48,25 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ["title"]
 
 
-def better_str(self):
+class DocumentAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
+
+
+def better_image_str(self):
     tags = ", ".join(str(t) for t in self.tags.all())
     return f"{self.title} ({tags})"
 
 
-Image.__str__ = better_str
+def better_document_str(self):
+    return f"{self.title} – {self.collection}"
+
+
+Image.__str__ = better_image_str
+Document.__str__ = better_document_str
 
 admin.site.unregister(Image)
+admin.site.unregister(Document)
+admin.site.register(Document, DocumentAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(models.Song, SongAdmin)
 admin.site.register(models.SetList, SetListAdmin)

@@ -16,11 +16,13 @@
 {% block content %}
 <div class="columns">
     <div class="column">
+        {% load wagtailimages_tags %}
+
         <h1 class="title is-1 np">{{song.title}}</h1>
         {% if song.notes %}<h2>{{song.notes}}</h2>{% endif %}
         {% if is_authenticated %}
         {% for chart in song.charts.all %}
-        <img src="{{chart.file.url}}">
+        <img src="{% image_url chart "original" %}" />
         {% endfor %}
         {% endif %}
         <section class="np has-text-centered">

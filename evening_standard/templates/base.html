@@ -46,19 +46,15 @@
   </div>
 
   <div id="the-navbar" class="navbar-menu">
-    <div class="navbar-start">
+    <div class="navbar-start">{% wagtail_site as current_site %}
       <a class="navbar-item" href="/">
         Home
       </a>
-      <a class="navbar-item" href="/shows/">
-        Shows
+      {% for menu_page in current_site.root_page.get_descendants.in_menu.public.live %}
+      <a class="navbar-item" href="{{menu_page.url}}">
+        {{menu_page.title}}
       </a>
-      <a class="navbar-item" href="/recordings/">
-        Recordings
-      </a>
-      <a class="navbar-item" href="/contact/">
-        Contact
-      </a>
+      {% endfor %}
 
     {% if not user.is_anonymous %}
       <div class="ml-4 navbar-item has-dropdown is-hoverable">

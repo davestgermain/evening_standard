@@ -86,7 +86,12 @@ class Show(Page):
     ]
 
     def get_recording_docs(self):
-        return Document.objects.filter(collection=self.recordings).order_by("file")
+        docs = (
+            Document.objects.filter(collection=self.recordings)
+            .filter(tags__name="public")
+            .order_by("file")
+        )
+        return docs
 
     @property
     def is_past(self):

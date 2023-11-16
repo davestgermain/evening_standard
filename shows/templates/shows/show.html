@@ -26,7 +26,6 @@
             <ul id="playlist" class="content pl-2 pt-3">
                 {% for recording in page.get_recording_docs %}
                 <li class="recording-item has-background-light" data-src="{{recording.url}}" title="{{recording.title}}">
-                    <a href="{{recording.url}}" title="download">&darr;</a>
                     <span class="track has-text-success-dark is-size-5 ml-2" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
                 </li>
                 {% endfor %}

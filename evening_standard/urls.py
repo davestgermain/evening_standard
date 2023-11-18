@@ -10,6 +10,7 @@ from wagtail.images.views.serve import ServeView
 
 from search import views as search_views
 from machina import urls as machina_urls
+from shows.views import mark_listen
 
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
     path("forum/", include(machina_urls)),
     path("setlist/", include("setlist.urls")),
     path("sitemap.xml", sitemap),
+    path("+play/", mark_listen),
 ]
 
 

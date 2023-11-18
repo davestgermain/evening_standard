@@ -17,22 +17,20 @@
 
 {% block content %}
 <div class="columns mt-3">
-    {% if page.recordings %}
+    {% if recordings %}
     <div class="column is-two-thirds">
-        {% if page.recordings %}
         <div class="box">
             <h3 id="currently-playing" class="subtitle"></h3>
             <audio class="media" id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
             <ul id="playlist" class="content pl-2 pt-3">
-                {% for recording in page.get_recording_docs %}
-                <li class="recording-item has-background-light" data-src="{{recording.url}}" title="{{recording.title}}">
+                {% for recording in recordings %}
+                <li class="recording-item has-background-light" data-src="{{recording.url}}" data-docid="{{recording.id}}" title="{{recording.title}}">
                     <span class="track has-text-success-dark is-size-5 ml-2" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
                 </li>
                 {% endfor %}
             </ul>
         </div>
         <hr>
-        {% endif %}
     </div>
     {% endif %}
     <div class="column has-text-centered">
@@ -40,8 +38,8 @@
             <div class="card mb-6 has-background-info-light">
                 <div class="card-content">
 
-                    <h1 class="title is-2">{{page.start|date:"l, F jS"}} {% if page.is_past %}{{page.start|date:"Y" }}{% endif %}</h1>
-                    {% if not page.is_past %}<h2 class="subtitle is-2">{{page.start|date:"P"}}</h2>{% endif %}
+                    <h1 class="title is-2">{{page.start|date:"l, F jS"}} {% if is_past %}{{page.start|date:"Y" }}{% endif %}</h1>
+                    {% if not is_past %}<h2 class="subtitle is-2">{{page.start|date:"P"}}</h2>{% endif %}
                     <h2 class="subtitle is-2"><a href="{{page.venue.best_url}}" target="_new">{{page.venue}}</a></h2>
                     <h2 class="subtitle is-3">{{page.venue.city}}, {{page.venue.state}}</h2>
 
@@ -51,7 +49,7 @@
                     {% endif %}
                 </div>
                 <footer class="card-footer">
-                    {% if not page.is_past %}
+                    {% if not is_past %}
                     <a class="card-footer-item" href="{{page.venue.map_url}}" target="_new">Directions</a>
                     {% endif %}
                 </footer>
@@ -72,12 +70,17 @@
 {% endblock %}
 
 {% block extra_js %}
-{% if page.recordings %}
+{% if recordings %}
+{% csrf_token %}
 <script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
     var currently_playing = document.getElementById('currently-playing');
     var player = document.getElementById('player');
+    var current_track = -1;
     function playTrack(track, play) {
         let item = document.getElementById('playlist').children[track];
+        player.setAttribute('data-docid', item.getAttribute('data-docid'));
         player.src = item.getAttribute('data-src');
         player.load();
         if (play) {
@@ -97,7 +100,23 @@
                 track = 0;
             }
             playTrack(track, true);
-            }, false);
+        }, false);
+        player.addEventListener('play', function() {
+            let track = parseInt(player.getAttribute('data-track'));
+
+            if (track != current_track) {
+                current_track = track;
+                var form = new FormData();
+                form.append("document", player.getAttribute("data-docid"));
+                fetch("/+play/", {
+                  method: "POST",
+                  body: form,
+                  headers: {
+                    "X-CSRFToken": csrftoken
+                  }
+                });
+            }
+        }, false);
         playTrack(0, false);
     }
     setup();

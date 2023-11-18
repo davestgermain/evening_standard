@@ -85,14 +85,22 @@ class Show(Page):
         FieldPanel("recordings"),
     ]
 
-    def get_recording_docs(self):
-        docs = (
-            Document.objects.filter(collection=self.recordings)
-            .filter(tags__name="public")
-            .order_by("file")
-        )
-        return docs
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["is_past"] = self.start < timezone.now()
+        if self.recordings:
+            recordings = (
+                Document.objects.filter(collection=self.recordings)
+                .filter(tags__name="public")
+                .order_by("file")
+            )
+            context["recordings"] = list(recordings)
+        return context
 
-    @property
-    def is_past(self):
-        return self.start < timezone.now()
+
+class Listen(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.DO_NOTHING, null=True)
+    start = models.DateTimeField(auto_now_add=True, db_index=True)
+    ip_address = models.GenericIPAddressField()
+    browser = models.CharField(max_length=255, default="unknown")
+    referer = models.CharField(max_length=255, default="")

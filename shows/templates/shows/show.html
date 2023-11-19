@@ -20,12 +20,12 @@
     {% if recordings %}
     <div class="column is-two-thirds">
         <div class="box">
-            <h3 id="currently-playing" class="subtitle"></h3>
+            <h3 id="currently-playing" class="subtitle has-text-centered is-4"></h3>
             <audio class="media" id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
             <ul id="playlist" class="content pl-2 pt-3">
                 {% for recording in recordings %}
-                <li class="recording-item has-background-light" data-src="{{recording.url}}" data-docid="{{recording.id}}" title="{{recording.title}}">
-                    <span class="track has-text-success-dark is-size-5 ml-2" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
+                <li class="recording-item has-background-light has-text-centered has-text-success-dark is-size-5 ml-2 pl-3 pr-3 pb-2 pt-2" data-src="{{recording.url}}" data-docid="{{recording.id}}" title="{{recording.title}}">
+                    <span id="title-{{forloop.counter0}}" class="track" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
                 </li>
                 {% endfor %}
             </ul>
@@ -78,7 +78,7 @@
     var currently_playing = document.getElementById('currently-playing');
     var player = document.getElementById('player');
     var current_track = -1;
-    function playTrack(track, play) {
+    function playTrack(track, play, elt) {
         let item = document.getElementById('playlist').children[track];
         player.setAttribute('data-docid', item.getAttribute('data-docid'));
         player.src = item.getAttribute('data-src');
@@ -105,7 +105,11 @@
             let track = parseInt(player.getAttribute('data-track'));
 
             if (track != current_track) {
+                if (current_track != -1) {
+                    document.getElementById(`title-${current_track}`).className = 'track';
+                }
                 current_track = track;
+                document.getElementById(`title-${track}`).className = 'track has-text-danger-dark';
                 var form = new FormData();
                 form.append("document", player.getAttribute("data-docid"));
                 fetch("/+play/", {

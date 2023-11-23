@@ -77,7 +77,6 @@
     {% load wagtailimages_tags %}
     {% for song in list.get_ordered_songs %}
         {% for chart in song.charts.all %}
-            <img width="100%" src="{{chart.file.url}}" />
             <img width="100%" src="{% image_url chart "original" %}" />
         {% endfor %}
     {% endfor %}

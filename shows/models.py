@@ -88,12 +88,13 @@ class Show(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context["is_past"] = self.start < timezone.now()
+        context["is_admin"] = not request.user.is_anonymous
         if self.recordings:
-            recordings = (
-                Document.objects.filter(collection=self.recordings)
-                .filter(tags__name="public")
-                .order_by("file")
+            recordings = Document.objects.filter(collection=self.recordings).order_by(
+                "file"
             )
+            if request.user.is_anonymous:
+                recordings = recordings.filter(tags__name="public")
             context["recordings"] = list(recordings)
         return context
 

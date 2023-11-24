@@ -8,10 +8,29 @@
 <div class="content is-size-3">
     {{ page.body|richtext }}
 </div>
-    <ul class="is-size-3">
+    <h3 id="currently-playing" class="subtitle has-text-centered is-4"></h3>
+    <audio class="media" id="player" src="" controls="controls" autoplay="no" align="" data-track="0"></audio>
+    <ul id="playlist" class="content pl-2 pt-3">
+        {% for recording in page.get_featured_recordings %}
+        <li 
+            class="recording-item has-background-light has-text-centered has-text-success-dark is-size-5 ml-2 pl-3 pr-3 pb-2 pt-2" 
+            data-src="{{recording.url}}" 
+            data-docid="{{recording.id}}" 
+            data-track="{{forloop.counter0}}"
+            title="{{recording.title}}">
+            <span id="title-{{forloop.counter0}}" class="track">{{recording.title}}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <ul class="content is-size-3">
     {% for show in page.get_shows_with_recordings %}
-    <li><a href="{{show.url}}">{{show}}</a></li>
+        <li><a href="{{show.url}}">{{show}}</a></li>
     {% endfor %}
     </ul>
+
+    {% include "js_player.html" %}
+
 {% endblock %}
 

@@ -24,6 +24,16 @@ class RecordingPage(Page):
         FieldPanel("body"),
     ]
 
+    def get_featured_recordings(self):
+        from wagtail.documents.models import Document
+
+        featured = (
+            Document.objects.order_by("file")
+            .filter(tags__name="public")
+            .filter(tags__name="featured")
+        )
+        return featured
+
     def get_shows_with_recordings(self):
         from shows.models import Show
 

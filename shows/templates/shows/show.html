@@ -1,18 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 
-{% block extra_css %}
-<!-- <link rel = "stylesheet" href = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /> -->
-<style>
-    li.recording-item {
-        cursor: pointer;
-    }
-    audio {
-        width: 100%;
-    }
-</style>
-{% endblock %}
-
 {% block body_class %}show-page{% endblock %}
 
 {% block content %}
@@ -21,11 +9,17 @@
     <div class="column is-two-thirds">
         <div class="box">
             <h3 id="currently-playing" class="subtitle has-text-centered is-4"></h3>
-            <audio class="media" id="player" src="" controls="controls" autoplay="autoplay" align="" data-track="0"></audio>
+            <audio class="media" id="player" src="" controls="controls" autoplay="no" align="" data-track="0"></audio>
             <ul id="playlist" class="content pl-2 pt-3">
                 {% for recording in recordings %}
-                <li class="recording-item has-background-light has-text-centered has-text-success-dark is-size-5 ml-2 pl-3 pr-3 pb-2 pt-2" data-src="{{recording.url}}" data-docid="{{recording.id}}" title="{{recording.title}}">
-                    <span id="title-{{forloop.counter0}}" class="track" onclick="playTrack({{forloop.counter0}}, true)">{{recording.title}}</span> 
+                <li 
+                    class="recording-item has-background-light has-text-centered has-text-success-dark is-size-5 ml-2 pl-3 pr-3 pb-2 pt-2" 
+                    data-src="{{recording.url}}" 
+                    data-docid="{{recording.id}}" 
+                    data-track="{{forloop.counter0}}"
+                    title="{{recording.title}}">
+                    <span id="title-{{forloop.counter0}}" class="track">{{recording.title}}</span>
+                    {% if is_admin %}{% if not recording.is_public %}<span class="has-text-danger-dark">(private)</span>{% endif %}{% endif %}
                 </li>
                 {% endfor %}
             </ul>
@@ -71,60 +65,7 @@
 
 {% block extra_js %}
 {% if recordings %}
-{% csrf_token %}
-<script type="text/javascript">
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    var currently_playing = document.getElementById('currently-playing');
-    var player = document.getElementById('player');
-    var current_track = -1;
-    function playTrack(track, play, elt) {
-        let item = document.getElementById('playlist').children[track];
-        player.setAttribute('data-docid', item.getAttribute('data-docid'));
-        player.src = item.getAttribute('data-src');
-        player.load();
-        if (play) {
-            player.play();
-        }
-        player.setAttribute('data-track', track);
-        currently_playing.innerText = item.title;
-    }
-    function setup() {
-        var nodes = document.getElementById('playlist').children;
-
-        player.addEventListener('ended', function() {
-            let track = parseInt(player.getAttribute('data-track'));
-            track++;
-            if (track == nodes.length)
-            {
-                track = 0;
-            }
-            playTrack(track, true);
-        }, false);
-        player.addEventListener('play', function() {
-            let track = parseInt(player.getAttribute('data-track'));
-
-            if (track != current_track) {
-                if (current_track != -1) {
-                    document.getElementById(`title-${current_track}`).className = 'track';
-                }
-                current_track = track;
-                document.getElementById(`title-${track}`).className = 'track has-text-danger-dark';
-                var form = new FormData();
-                form.append("document", player.getAttribute("data-docid"));
-                fetch("/+play/", {
-                  method: "POST",
-                  body: form,
-                  headers: {
-                    "X-CSRFToken": csrftoken
-                  }
-                });
-            }
-        }, false);
-        playTrack(0, false);
-    }
-    setup();
-</script>
+{% include "js_player.html" %}
 {% endif %}
 <!--
 <script src = "//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>

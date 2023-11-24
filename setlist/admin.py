@@ -61,8 +61,15 @@ def better_document_str(self):
     return f"{self.title} – {self.collection}"
 
 
+def is_public(self):
+    return self.tags.filter(name="public").exists()
+
+
 Image.__str__ = better_image_str
+Image.is_public = is_public
 Document.__str__ = better_document_str
+Document.is_public = is_public
+
 
 admin.site.unregister(Image)
 admin.site.unregister(Document)

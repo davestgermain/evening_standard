@@ -1,3 +1,10 @@
+li.recording-item {
+    cursor: pointer;
+}
+audio {
+    width: 100%;
+}
+
 @media print {
     nav,button,select,wagtail-userbar {
         display: none;

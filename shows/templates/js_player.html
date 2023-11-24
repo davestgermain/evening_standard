@@ -1,0 +1,67 @@
+{% csrf_token %}
+<script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    var currently_playing = document.getElementById('currently-playing');
+    var player = document.getElementById('player');
+    var current_track = -1;
+    function playTrack(item, play) {
+        player.setAttribute('data-docid', item.getAttribute('data-docid'));
+        player.src = item.getAttribute('data-src');
+        player.load();
+        if (play) {
+            player.play();
+        }
+        player.setAttribute('data-track', item.getAttribute('data-track'));
+        currently_playing.innerText = item.title;
+    }
+    function playlistClick(event) {
+        if (!event.target.hasAttribute('data-track')) {
+            playTrack(event.target.parentNode, true);
+        } else {
+            playTrack(event.target, true);
+        }
+    }
+    function setup() {
+        var nodes = document.getElementById('playlist').children;
+        if (nodes.length == 0) {
+            player.remove();
+            currently_playing.remove();
+            return;
+        }
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].addEventListener('click', playlistClick);
+        }
+        player.addEventListener('ended', function() {
+            let track = parseInt(player.getAttribute('data-track'));
+            track++;
+            if (track == nodes.length)
+            {
+                track = 0;
+            }
+            playTrack(nodes[track], true);
+        }, false);
+        player.addEventListener('play', function() {
+            let track = parseInt(player.getAttribute('data-track'));
+
+            if (track != current_track) {
+                if (current_track != -1) {
+                    document.getElementById(`title-${current_track}`).className = 'track';
+                }
+                current_track = track;
+                document.getElementById(`title-${track}`).className = 'track has-text-danger-dark';
+                var form = new FormData();
+                form.append("document", player.getAttribute("data-docid"));
+                fetch("/+play/", {
+                  method: "POST",
+                  body: form,
+                  headers: {
+                    "X-CSRFToken": csrftoken
+                  }
+                });
+            }
+        }, false);
+        playTrack(nodes[0], false);
+    }
+    setup();
+</script>

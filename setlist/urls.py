@@ -7,5 +7,6 @@ urlpatterns = [
     path("<int:list_id>/", views.show_setlist),
     path("<int:list_id>/duplicate/", views.duplicate_setlist),
     path("<int:list_id>/edit/", views.edit_setlist),
+    path("<int:list_id>/print/", views.print_setlist),
     path("song/<int:song_id>/", views.show_song),
 ]

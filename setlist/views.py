@@ -1,7 +1,10 @@
 import json
+import hashlib
+from tempfile import TemporaryFile
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
+from django.core.files.storage import default_storage
 
 from .models import SetList, SetSong, Song
 
@@ -13,13 +16,41 @@ def show_setlists(request):
     return render(request, "setlist/index.html", context)
 
 
+def print_setlist(request, list_id):
+    songlist = get_object_or_404(SetList, pk=list_id)
+    if not request.user.is_authenticated:
+        return redirect("/admin/")
+    charts = []
+    for song in songlist.get_ordered_songs():
+        charts.extend(song.charts.all())
+
+    path = "charts/{}_{}.pdf".format(
+        songlist.title.lower().replace(" ", "_"),
+        hashlib.md5("".join(str(c.id) for c in charts).encode("utf8")).hexdigest(),
+    )
+    if not default_storage.exists(path):
+        from PIL import Image
+
+        images = [Image.open(chart.file) for chart in charts]
+        with TemporaryFile() as temp_file:
+            images[0].save(
+                temp_file,
+                format="pdf",
+                save_all=True,
+                append_images=images[1:],
+                # dpi=(11, 8.5),
+            )
+            temp_file.seek(0)
+            default_storage.save(path, temp_file)
+    return redirect(f"/media/{path}")
+
+
 def show_setlist(request, list_id):
     songlist = get_object_or_404(SetList, pk=list_id)
     is_authenticated = request.user.is_authenticated
     context = {
         "can_change": is_authenticated,
         "list": songlist,
-        "do_print": is_authenticated and request.GET.get("print") == "1",
         "all_songs": Song.objects.exclude(
             pk__in=[s.id for s in songlist.songs.all()]
         ).order_by("title"),

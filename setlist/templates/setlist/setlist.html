@@ -73,14 +73,6 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-    {% if do_print %}
-    {% load wagtailimages_tags %}
-    {% for song in list.get_ordered_songs %}
-        {% for chart in song.charts.all %}
-            <img width="100%" src="{% image_url chart "original" %}" />
-        {% endfor %}
-    {% endfor %}
-    {% else %}
     <h1 class="title">{{list.title}}</h1>
     {% if list.notes %}
     <div class="content">
@@ -124,14 +116,13 @@
             {% endif %}
             <div class="buttons ml-2 mt-2">
                 <button id="set-order-button" class="button is-success" style="display:none">Save</button>
-                <button class="button is-info" onclick="location = '/setlist/{{list.id}}/?print=1'">Print Charts</button>
+                <button class="button is-info" onclick="location = '/setlist/{{list.id}}/print/'">Print Charts</button>
                 <button class="button" onclick="location = '/django-admin/setlist/setlist/{{list.id}}/change/?next=/setlist/{{list.id}}/'">Edit</button>
                 <button onclick="location = '/setlist/{{list.id}}/duplicate/'" class="button is-warning">Duplicate</button>
             </div>
         </div>
     {% endif %}
     </div>
-    {% endif %}
     {% csrf_token %}
 {% endblock %}
 
@@ -222,26 +213,22 @@ function removeSong(elt_id) {
 }
 
 window.addEventListener("load", function() {
-    {% if do_print %}
-        window.setTimeout(window.print, 1000);
-    {% else %}
-        slist(document.getElementById('setlist'));
-        {% if all_songs %}
-        document.getElementById("add-song").onclick = function() {
-            let new_song = document.getElementById("song-picker");
-            let elt = document.createElement('li');
-            elt.id =  new_song.value;
-            elt.innerText = new_song.options[new_song.selectedIndex].text;
-            document.getElementById('setlist').appendChild(elt);
-            save_list();
-        };
-        {% endif %}
-        document.getElementById('set-order-button').onclick = function() {
-            if (confirm("Are you sure you want to re-arrange {{list.title}}?")) {
-                save_list();
-            }
-        };
+    slist(document.getElementById('setlist'));
+    {% if all_songs %}
+    document.getElementById("add-song").onclick = function() {
+        let new_song = document.getElementById("song-picker");
+        let elt = document.createElement('li');
+        elt.id =  new_song.value;
+        elt.innerText = new_song.options[new_song.selectedIndex].text;
+        document.getElementById('setlist').appendChild(elt);
+        save_list();
+    };
     {% endif %}
+    document.getElementById('set-order-button').onclick = function() {
+        if (confirm("Are you sure you want to re-arrange {{list.title}}?")) {
+            save_list();
+        }
+    };
 });
 
 </script>

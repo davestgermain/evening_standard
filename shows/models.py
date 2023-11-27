@@ -46,13 +46,13 @@ class ShowIndex(Page):
 
         shows = Show.objects.live().child_of(self)
         upcoming = shows.filter(start__gte=timezone.now()).order_by("start")
+        past = shows.filter(start__lt=timezone.now()).order_by("-start")
         if request.user.is_anonymous:
             upcoming = upcoming.filter(public=True)
+            past = past.filter(public=True)
         context["upcoming_shows"] = upcoming
 
-        context["past_shows"] = shows.filter(start__lt=timezone.now()).order_by(
-            "-start"
-        )
+        context["past_shows"] = past
 
         return context
 

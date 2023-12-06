@@ -21,24 +21,46 @@ def print_setlist(request, list_id):
     if not request.user.is_authenticated:
         return redirect("/admin/")
     charts = []
+    chart_ids = ""
     for song in songlist.get_ordered_songs():
-        charts.extend(song.charts.all())
+        songcharts = list(song.charts.all())
+        # if the song has multiple pages, and it starts on an odd page,
+        # insert a blank page before
+        if len(charts) % 2 != 0 and len(songcharts) % 2 == 0:
+            charts.append(None)
+            chart_ids += "-1"
+        for s in songcharts:
+            charts.append(s)
+            chart_ids += str(s.id)
 
     path = "charts/{}_{}.pdf".format(
         songlist.title.lower().replace(" ", "_"),
-        hashlib.md5("".join(str(c.id) for c in charts).encode("utf8")).hexdigest(),
+        hashlib.md5(chart_ids.encode("utf8")).hexdigest(),
     )
     if not default_storage.exists(path):
-        from PIL import Image
+        from PIL import Image, ImageOps
 
-        images = [Image.open(chart.file) for chart in charts]
+        page_size = (2550, 3300)
+
+        blank_image = Image.new("RGB", page_size, color=(255, 255, 255)).convert("L")
+        images = []
+        for chart in charts:
+            if chart is not None:
+                image = ImageOps.pad(
+                    Image.open(chart.file).convert("L"), page_size, color="#fff"
+                )
+                images.append(image)
+            else:
+                # blank page inserted before multi-page charts
+                images.append(blank_image)
+
         with TemporaryFile() as temp_file:
             images[0].save(
                 temp_file,
                 format="pdf",
                 save_all=True,
                 append_images=images[1:],
-                # dpi=(11, 8.5),
+                resolution=300,
             )
             temp_file.seek(0)
             default_storage.save(path, temp_file)

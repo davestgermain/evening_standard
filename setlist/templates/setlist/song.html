@@ -21,7 +21,7 @@
         <h1 class="title is-1 np">{{song.title}}</h1>
         {% if song.notes %}<h2>{{song.notes}}</h2>{% endif %}
         {% if is_authenticated %}
-        {% for chart in song.charts.all %}
+        {% for chart in song.sorted_charts %}
         <img src="{% image_url chart "original" %}" />
         {% endfor %}
         {% endif %}

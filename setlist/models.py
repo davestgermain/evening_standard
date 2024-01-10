@@ -24,6 +24,10 @@ class Song(models.Model):
     def get_absolute_url(self):
         return f"/setlist/song/{self.id}/"
 
+    @property
+    def sorted_charts(self):
+        return self.charts.all().order_by("title")
+
 
 class SetList(models.Model):
     title = models.CharField(max_length=255)

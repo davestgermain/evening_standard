@@ -54,7 +54,7 @@
             <h3 class="subtitle mt-4"><a href="/setlist/{{page.set_list.id}}/">Set List</a></h3>
             <ol class="ml-5">
             {% for song in page.set_list.get_ordered_songs %}
-                <li>{{song}} {% for chart in song.charts.all %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
+                <li>{{song}} {% for chart in song.sorted_charts %}<a href="{{chart.file.url}}">{{forloop.counter}}</a> {% endfor %}</li>
             {% endfor %}
             </ol>
         </div>

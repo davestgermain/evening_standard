@@ -23,7 +23,7 @@ def print_setlist(request, list_id):
     charts = []
     chart_ids = ""
     for song in songlist.get_ordered_songs():
-        songcharts = list(song.charts.all())
+        songcharts = list(song.sorted_charts)
         # if the song has multiple pages, and it starts on an odd page,
         # insert a blank page before
         if len(charts) % 2 != 0 and len(songcharts) % 2 == 0:

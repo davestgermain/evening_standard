@@ -152,7 +152,8 @@ def chart_view(request):
                 "title": song.title,
                 "url": f"/setlist/song/{song.id}",
                 "charts": ",".join(
-                    image.get_rendition("original").url for image in song.sorted_charts
+                    image.get_rendition("width-1240|format-jpeg").url
+                    for image in song.sorted_charts
                 ),
             }
         )

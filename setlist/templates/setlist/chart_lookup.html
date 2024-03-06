@@ -41,7 +41,16 @@
 <div class="columns">
     <div class="column">
         <h1 class="title has-text-centered">Chart Lookup</h1>
-        <input class="input has-text-centered" list="chart-names" id="song-choice" name="chart-names" autofocus autocomplete="off" onchange="change_chart(this, document.getElementById('chart-names'))" />
+        <input
+            class="input has-text-centered"
+            list="chart-names"
+            id="song-choice"
+            name="chart-names"
+            autofocus
+            autocomplete="off"
+            onchange="change_chart(this, document.getElementById('chart-names'))"
+            onfocus="javascript:this.value=''"
+        />
 
         <datalist id="chart-names">
             {% for song in songs %}

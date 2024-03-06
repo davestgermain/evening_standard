@@ -2,7 +2,7 @@ import json
 import hashlib
 from tempfile import TemporaryFile
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.http import JsonResponse
 from django.core.files.storage import default_storage
 
@@ -141,3 +141,23 @@ def edit_setlist(request, list_id):
                 setlist=source, song_id=int(song_id), sort_order=sort_order
             )
     return JsonResponse({"saved": True})
+
+
+@login_required(login_url="/admin/login")
+def chart_view(request):
+    songs = []
+    for song in Song.objects.all().order_by("title"):
+        songs.append(
+            {
+                "title": song.title,
+                "url": f"/setlist/song/{song.id}",
+                "charts": ",".join(
+                    image.get_rendition("original").url for image in song.sorted_charts
+                ),
+            }
+        )
+
+    ctx = {
+        "songs": songs,
+    }
+    return render(request, "setlist/chart_lookup.html", ctx)

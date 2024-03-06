@@ -36,7 +36,7 @@ if settings.DEBUG:
 urlpatterns = urlpatterns + [
     re_path(
         r"^images/([^/]*)/(\d*)/([^/]*)/[^/]*$",
-        ServeView.as_view(),
+        ServeView.as_view(action="redirect"),
         name="wagtailimages_serve",
     ),
     # For anything not caught by a more specific rule above, hand over to

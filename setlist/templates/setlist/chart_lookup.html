@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block title %}Chart Lookup{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+    img {
+        height: 100vh;
+    }
+</style>
+{% endblock %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<script>
+    function change_chart(elt, dl) {
+        if (elt.value.trim() != '') {
+            var selected = dl.querySelector(`[value="${elt.value}"]`);
+            if (selected != undefined) {
+                document.getElementById("song-title").innerText = selected.value;
+                var image_container = document.getElementById("chart-images");
+                image_container.innerHTML = "";
+                var charts = selected.dataset.charts.split(",");
+                for (let i = 0; i < charts.length; i++) {
+                    image = new Image()
+                    image.src = charts[i];
+                    image_container.appendChild(image);
+                }
+                var song_link = document.getElementById("song-link");
+                song_link.text = selected.value;
+                song_link.href = selected.dataset.url;
+            }
+
+        }
+    }
+</script>
+
+<div class="columns">
+    <div class="column">
+        <h1 class="title has-text-centered">Chart Lookup</h1>
+        <input class="input has-text-centered" list="chart-names" id="song-choice" name="chart-names" autofocus autocomplete="off" onchange="change_chart(this, document.getElementById('chart-names'))" />
+
+        <datalist id="chart-names">
+            {% for song in songs %}
+          <option value="{{song.title}}" data-charts="{{song.charts}}" data-url="{{song.url}}"></option>
+          {% endfor %}
+        </datalist>
+        <hr>
+        <h2 id="song-title" class="title is-1 np has-text-centered"></h2>
+        <section id="chart-images" class="has-text-centered">
+        </section>
+        <a href="" id="song-link"></a>
+    </div>
+</div>
+{% endblock %}
+

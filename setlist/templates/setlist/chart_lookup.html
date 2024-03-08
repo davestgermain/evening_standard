@@ -19,7 +19,7 @@
         if (elt.value.trim() != '') {
             var selected = dl.querySelector(`[value="${elt.value}"]`);
             if (selected != undefined) {
-                document.getElementById("song-title").innerText = selected.value;
+                //document.getElementById("song-title").innerText = selected.value;
                 var image_container = document.getElementById("chart-images");
                 image_container.innerHTML = "";
                 var charts = selected.dataset.charts.split(",");
@@ -59,7 +59,7 @@
           {% endfor %}
         </datalist>
         <hr>
-        <h2 id="song-title" class="title is-1 np has-text-centered">(song)</h2>
+        <!-- <h2 id="song-title" class="title is-1 np has-text-centered">(song)</h2> -->
         <section id="chart-images" class="has-text-centered">
         </section>
         <a href="#" id="song-link">(song)</a>

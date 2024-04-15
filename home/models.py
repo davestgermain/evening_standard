@@ -37,7 +37,7 @@ class RecordingPage(Page):
     def get_shows_with_recordings(self):
         from shows.models import Show
 
-        return Show.objects.filter(recordings__isnull=False)
+        return Show.objects.filter(recordings__isnull=False).order_by("-start")
 
 
 class FormField(AbstractFormField):

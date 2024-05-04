@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "haystack",
     "widget_tweaks",
     "bulma",
-    "captcha",
+    "django_recaptcha",
     "wagtailcaptcha",
     # Machina apps:
     "machina",

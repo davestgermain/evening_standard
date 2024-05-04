@@ -1,7 +1,7 @@
 Django<5.0
-wagtail>=5.1,<6.1
+wagtail>=5.1,<6.2
 django-machina
 whoosh
 django-watchfiles
 django-bulma
-wagtail-django-recaptcha
+wagtail-django-recaptcha>=2.0

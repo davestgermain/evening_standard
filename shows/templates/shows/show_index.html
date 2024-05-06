@@ -6,8 +6,9 @@
 
 <div class="columns">
 {% if upcoming_shows %}
+    {% load static %}
     <div class="column has-text-centered is-two-thirds">
-        <h1 class="title is-1">Upcoming</h1>
+        <h1 class="title is-1">Upcoming <a href="/cal/" title="Subscribe to calendar"><img src="{% static 'img/calendar.png' %}" width=32></a></h1>
         {% for show in upcoming_shows %}
             <div class="card mb-6 has-background-info-light">
                 <div class="card-content">

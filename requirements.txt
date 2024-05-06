@@ -5,3 +5,4 @@ whoosh
 django-watchfiles
 django-bulma
 wagtail-django-recaptcha>=2.0
+ics

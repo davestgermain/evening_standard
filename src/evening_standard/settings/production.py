@@ -5,11 +5,11 @@ DEBUG = False
 ALLOWED_HOSTS = ["eveningstandardjazz.com"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "naquag.forum@gmail.com"
+EMAIL_HOST = "localhost"
+EMAIL_HOST_USER = "django@pobblelabs.org"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "naquag.forum@gmail.com"
+DEFAULT_FROM_EMAIL = "django@pobblelabs.org"
 
 STATIC_ROOT = "/var/www/htdocs/eveningstandardjazz.com/static/"
 MEDIA_ROOT = "/var/www/htdocs/eveningstandardjazz.com/media/"
@@ -27,7 +27,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-ADMINS = [("Dave St.Germain", "dave@st.germa.in")]
+ADMINS = [("Dave St.Germain", "dcs@pobblelabs.org")]
 
 WAGTAILDOCS_SERVE_METHOD = "redirect"
 

@@ -216,7 +216,7 @@ WAGTAILADMIN_BASE_URL = "https://eveningstandardjazz.com"
 
 WAGTAIL_SITE_NAME = "The Evening Standard"
 
-DEFAULT_FROM_EMAIL = "naquag.forum@gmail.com"
+DEFAULT_FROM_EMAIL = "django@pobblelabs.org"
 
 NOCAPTCHA = True
 RECAPTCHA_PUBLIC_KEY = ""

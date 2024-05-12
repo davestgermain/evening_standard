@@ -6,9 +6,9 @@ ALLOWED_HOSTS = ["eveningstandardjazz.com"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "localhost"
-EMAIL_HOST_USER = "django@pobblelabs.org"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "django@pobblelabs.org"
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = "django@pobblelabs.org"
 
 STATIC_ROOT = "/var/www/htdocs/eveningstandardjazz.com/static/"

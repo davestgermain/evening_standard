@@ -2,6 +2,8 @@ from .base import *
 
 DEBUG = False
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 ALLOWED_HOSTS = ["eveningstandardjazz.com"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
